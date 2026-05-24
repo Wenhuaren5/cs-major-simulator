@@ -34,6 +34,18 @@ struct Team {
     // 是否已经3败淘汰
     bool eliminated = false;
 
+    // 统计这支队伍以 3-0 晋级的次数
+    int threeZeroCount = 0;
+
+    // 统计这支队伍以 3-1 晋级的次数
+    int threeOneCount = 0;
+
+    // 统计这支队伍以 3-2 晋级的次数
+    int threeTwoCount = 0;
+
+    // 统计这支队伍以 0-3 出局的次数
+    int zeroThreeCount = 0;
+
     // 记录以前打过哪些队
     // 用于避免重复对阵
     vector<int> opponents;
@@ -347,12 +359,32 @@ int main() {
             currentRound = generateNextRound(teams);
         }
 
-        // 统计晋级队伍
+        // 统计每支队伍最终是怎么结束瑞士轮的
         for (int i = 0; i < teams.size(); i++) {
 
+            // 只要3胜，就是晋级
             if (teams[i].advanced) {
-
                 originalTeams[i].advanceCount++;
+            }
+
+            // 3-0 晋级
+            if (teams[i].wins == 3 && teams[i].losses == 0) {
+                originalTeams[i].threeZeroCount++;
+            }
+
+            // 3-1 晋级
+            if (teams[i].wins == 3 && teams[i].losses == 1) {
+                originalTeams[i].threeOneCount++;
+            }
+
+            // 3-2 晋级
+            if (teams[i].wins == 3 && teams[i].losses == 2) {
+                originalTeams[i].threeTwoCount++;
+            }
+
+            // 0-3 出局
+            if (teams[i].wins == 0 && teams[i].losses == 3) {
+                originalTeams[i].zeroThreeCount++;
             }
         }
     }
@@ -360,9 +392,9 @@ int main() {
     cout << fixed << setprecision(2);
 
     cout << endl;
-    cout << "晋级概率：" << endl;
+    cout << "瑞士轮结果概率：" << endl;
 
-    // 按晋级次数排序
+    // 按总晋级概率排序
     sort(
         originalTeams.begin(),
         originalTeams.end(),
@@ -371,20 +403,137 @@ int main() {
         }
     );
 
-    // 输出结果
+    // 表头
+    cout
+    << setw(15) << left << "队伍"
+    << setw(10) << "3-0"
+    << setw(10) << "3-1"
+    << setw(10) << "3-2"
+    << setw(12) << "总晋级"
+    << setw(10) << "0-3"
+    << endl;
+
+    // 输出每支队伍的数据
     for (Team t : originalTeams) {
 
-        double percent =
+        // 各种概率
+        double p30 =
+            100.0 * t.threeZeroCount / simulations;
+
+        double p31 =
+            100.0 * t.threeOneCount / simulations;
+
+        double p32 =
+            100.0 * t.threeTwoCount / simulations;
+
+        double pAdv =
             100.0 * t.advanceCount / simulations;
 
+        double p03 =
+            100.0 * t.zeroThreeCount / simulations;
+
+        // 输出表格
         cout
-        << setw(20)
-        << left
-        << t.name
-        << percent
-        << "%"
+        << setw(15) << left << t.name
+        << setw(10) << p30
+        << setw(10) << p31
+        << setw(10) << p32
+        << setw(12) << pAdv
+        << setw(10) << p03
         << endl;
     }
+
+    // =======================
+    // 晋级 推荐
+    // =======================
+
+    cout << endl;
+    cout << "Pick'Em 推荐：" << endl;
+
+    vector<Team> pickTeams = originalTeams;
+
+    // 推荐 3-0：选择 3-0 概率最高的两支队伍
+    sort(
+        pickTeams.begin(),
+        pickTeams.end(),
+        [](Team a, Team b) {
+            return a.threeZeroCount > b.threeZeroCount;
+        }
+    );
+
+    vector<string> threeZeroPicks;
+
+    for (int i = 0; i < 2; i++) {
+        threeZeroPicks.push_back(pickTeams[i].name);
+    }
+
+    cout << "推荐 3-0 队伍: ";
+    for (string name : threeZeroPicks) {
+        cout << name << " ";
+    }
+    cout << endl;
+
+
+    // 推荐 0-3：选择 0-3 概率最高的两支队伍
+    sort(
+        pickTeams.begin(),
+        pickTeams.end(),
+        [](Team a, Team b) {
+            return a.zeroThreeCount > b.zeroThreeCount;
+        }
+    );
+
+    vector<string> zeroThreePicks;
+
+    for (int i = 0; i < 2; i++) {
+        zeroThreePicks.push_back(pickTeams[i].name);
+    }
+
+    cout << "推荐 0-3 队伍: ";
+    for (string name : zeroThreePicks) {
+        cout << name << " ";
+    }
+    cout << endl;
+
+
+    // 推荐普通晋级队伍：选择总晋级概率最高的6支
+    // 注意：排除已经被选为3-0的队伍
+    sort(
+        pickTeams.begin(),
+        pickTeams.end(),
+        [](Team a, Team b) {
+            return a.advanceCount > b.advanceCount;
+        }
+    );
+
+    cout << "推荐普通晋级队伍: ";
+
+    int count = 0;
+
+    for (Team t : pickTeams) {
+
+        bool alreadyPickedAsThreeZero = false;
+
+        for (string name : threeZeroPicks) {
+            if (t.name == name) {
+                alreadyPickedAsThreeZero = true;
+                break;
+            }
+        }
+
+        if (alreadyPickedAsThreeZero) {
+            continue;
+        }
+
+        cout << t.name << " ";
+        count++;
+
+        if (count == 6) {
+            break;
+        }
+    }
+
+cout << endl;
 
     return 0;
 }
