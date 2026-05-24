@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <!-- 网页基础设置：编码、适配屏幕、标题、连接CSS样式文件 -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Major瑞士轮模拟器</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- 网页主标题 -->
+    <h1>科隆Major瑞士轮模拟器</h1>
+
+    <!-- 页面主体：左边输入对阵，右边显示生成后的队伍列表 -->
+    <div class="mainLayout">
+
+        <!-- 左侧区域：用户输入第一轮8组对阵 -->
+        <div class="leftPanel">
+
+            <p>
+                输入第一轮对阵，然后生成队伍。
+            </p>
+
+            <!-- 第一轮对阵输入区域 -->
+            <div id="matches">
+
+                <h2>Round 1 Matchups</h2>
+
+                <!-- 每一个 match 表示一组第一轮对阵 -->
+                <div class="match">
+                    <span class="matchLabel">第一组：</span>
+                    <input type="text" placeholder="Team A">
+                    VS
+                    <input type="text" placeholder="Team B">
+                </div>
+
+                <div class="match">
+                    <span class="matchLabel">第二组：</span>
+                    <input type="text" placeholder="Team A">
+                    VS
+                    <input type="text" placeholder="Team B">
+                </div>
+
+                <div class="match">
+                    <span class="matchLabel">第三组：</span>
+                    <input type="text" placeholder="Team A">
+                    VS
+                    <input type="text" placeholder="Team B">
+                </div>
+
+                <div class="match">
+                    <span class="matchLabel">第四组：</span>
+                    <input type="text" placeholder="Team A">
+                    VS
+                    <input type="text" placeholder="Team B">
+                </div>
+
+                <div class="match">
+                    <span class="matchLabel">第五组：</span>
+                    <input type="text" placeholder="Team A">
+                    VS
+                    <input type="text" placeholder="Team B">
+                </div>
+
+                <div class="match">
+                    <span class="matchLabel">第六组：</span>
+                    <input type="text" placeholder="Team A">
+                    VS
+                    <input type="text" placeholder="Team B">
+                </div>
+
+                <div class="match">
+                    <span class="matchLabel">第七组：</span>
+                    <input type="text" placeholder="Team A">
+                    VS
+                    <input type="text" placeholder="Team B">
+                </div>
+
+                <div class="match">
+                    <span class="matchLabel">第八组：</span>
+                    <input type="text" placeholder="Team A">
+                    VS
+                    <input type="text" placeholder="Team B">
+                </div>
+
+            </div>
+
+            <!-- 点击后由 script.js 读取输入框内容，并生成右侧队伍列表 -->
+            <button id="generateButton">
+                生成队伍
+            </button>
+            
+        </div>
+
+        <!-- 右侧区域：JS会把生成后的队伍列表放进 teamList 里 -->
+        <div class="rightPanel">
+            <div id="teamList"></div>
+        </div>
+
+    </div>
+
+    <!-- 连接 JavaScript 文件，负责按钮点击、检测重复队伍、生成队伍列表等功能 -->
+    <script src="script.js"></script>
+
+</body>
+
+</html>

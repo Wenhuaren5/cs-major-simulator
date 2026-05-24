@@ -1,0 +1,272 @@
+/* =========================
+   整个网页的基础设置
+   控制背景、字体、整体边距
+========================= */
+
+body {
+    background: linear-gradient(to bottom, #123524, #08150f);
+    color: white;
+
+    font-family: Arial, sans-serif;
+
+    text-align: center;
+
+    padding: 40px;
+}
+
+/* =========================
+   网页主标题样式
+========================= */
+
+h1 {
+    color: white;
+
+    text-shadow:
+        -2px -2px 0 black,
+         2px -2px 0 black,
+        -2px  2px 0 black,
+         2px  2px 0 black;
+}
+
+/* =========================
+   页面主体布局
+   左边输入区 + 右边队伍区
+========================= */
+
+.mainLayout {
+
+    display: grid;
+
+    grid-template-columns: 700px 280px;
+
+    justify-content: flex-start;
+
+    margin-left: 120px;
+
+    align-items: start;
+
+    gap: 60px;
+}
+
+/* 左侧输入区域 */
+
+.leftPanel {
+    width: 650px;
+}
+
+/* 右侧队伍显示区域 */
+
+.rightPanel {
+
+    width: 420px;
+
+    min-height: 500px;
+
+    background-color: rgba(0, 40, 20, 0.55);
+
+    border: 2px solid rgba(120, 255, 160, 0.5);
+
+    border-radius: 12px;
+
+    padding: 20px;
+
+    text-align: left;
+}
+
+/* 右侧区域标题 */
+
+.rightPanel h2 {
+
+    text-align: center;
+
+    color: white;
+
+    text-shadow:
+        -1px -1px 0 black,
+         1px -1px 0 black,
+        -1px  1px 0 black,
+         1px  1px 0 black;
+}
+
+/* =========================
+   第一轮对阵区域
+========================= */
+
+/* 每一组对阵 */
+
+.match {
+    margin: 10px;
+}
+
+/* “第一组”“第二组” 等标签 */
+
+.matchLabel {
+
+    color: white;
+
+    text-shadow:
+        -1px -1px 0 black,
+         1px -1px 0 black,
+        -1px  1px 0 black,
+         1px  1px 0 black;
+
+    font-weight: bold;
+
+    margin-right: 20px;
+
+    width: 80px;
+
+    display: inline-block;
+}
+
+/* =========================
+   输入框样式
+========================= */
+
+/* 普通输入框 */
+
+input {
+
+    padding: 8px;
+
+    width: 150px;
+
+    margin: 5px;
+}
+
+/* Rating 输入框 */
+
+.ratingInput {
+
+    width: 55px;
+
+    padding: 5px;
+
+    font-size: 16px;
+}
+
+/* 输入重复队伍时，输入框标红 */
+
+.duplicateInput {
+
+    border: 3px solid red;
+
+    background-color: #ffd6d6;
+}
+
+/* =========================
+   按钮样式
+========================= */
+
+button {
+
+    background-color: #6dff9b;
+
+    color: black;
+
+    border: none;
+
+    padding: 10px 20px;
+
+    font-size: 16px;
+
+    cursor: pointer;
+
+    border-radius: 8px;
+
+    margin-top: 20px;
+}
+
+/* 鼠标移动到按钮上 */
+
+button:hover {
+    background-color: #9dffba;
+}
+
+/* 按钮被禁用时 */
+
+button:disabled {
+
+    background-color: gray;
+
+    cursor: not-allowed;
+
+    color: #dddddd;
+}
+
+/* =========================
+   队伍列表区域
+========================= */
+
+#teamList {
+
+    margin-top: 10px;
+
+    font-size: 18px;
+}
+
+/* 队伍列表标题下方的小提示 */
+
+.teamHeader {
+    margin-bottom: 25px;
+}
+
+/* “请输入你对这支战队的评分” 提示 */
+
+.ratingTip {
+
+    font-size: 12px;
+
+    color: rgba(255,255,255,0.75);
+
+    margin-top: -10px;
+}
+
+/* =========================
+   队伍列表布局
+========================= */
+
+/* 每一行放两个队伍 */
+
+.teamRow {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    column-gap: 70px;
+
+    margin-bottom: 18px;
+}
+
+/* 单个队伍名称 */
+
+.teamItem {
+
+    width: 80px;
+
+    text-align: left;
+
+    font-size: 22px;
+
+    font-weight: bold;
+
+    color: white;
+
+    text-shadow:
+        -1px -1px 0 black,
+         1px -1px 0 black,
+        -1px  1px 0 black,
+         1px  1px 0 black;
+}
+
+/* 队伍名 + Rating 输入框 */
+
+.teamRatingBox {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+}
