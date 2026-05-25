@@ -218,43 +218,202 @@ generateButton.addEventListener("click", function () {
         }
 
         // =========================
-        // 运行一次完整模拟
+        // 设置模拟次数
         // =========================
-        const result = runSimulation(
+        const simulationCount = 10000;
+
+        // =========================
+        // 运行 Monte Carlo 模拟
+        // =========================
+        const monteCarloResult = runMonteCarlo(
+
             teamsData,
-            firstRoundMatches
+
+            firstRoundMatches,
+
+            simulationCount
         );
 
-        // 在控制台输出结果
-        console.log(result);
+        // 取出概率统计
+        const stats =
+            monteCarloResult.stats;
 
-        // 先把结果整理成一段文字
-        let resultText = "本次模拟结果：\n\n";
+        // 取出每一次模拟的完整结果
+        const simulationResults =
+            monteCarloResult.simulationResults;
 
-        result.forEach(team => {
+        // 在控制台查看统计结果
+        console.log(stats);
 
-            resultText +=
-                team.name +
-                "：" +
-                team.wins +
-                "-" +
-                team.losses +
-                "\n";
-        });
-
+        // =========================
         // 获取结果区域
-        const resultPanel = document.getElementById("resultPanel");
+        // =========================
+        const resultPanel =
+            document.getElementById("resultPanel");
 
-        // 把结果显示到网页
-        resultPanel.innerHTML = `
+        // =========================
+        // 表格开头
+        // =========================
+        let resultHTML = `
 
-            <h2>本次模拟结果</h2>
+            <h2>模拟结果</h2>
 
-            <pre>${resultText}</pre>
+            <table class="resultTable">
+
+                <tr>
+                    <th>队伍</th>
+                    <th class="ratingColumn">评分</th>
+                    <th>3-0</th>
+                    <th>晋级</th>
+                    <th>0-3</th>
+                </tr>
 
         `;
 
+        // 先按 rating 排序
+        // 如果 rating 一样，再按 3-0 概率排序
+        teamsData.sort((a, b) => {
+
+            // rating 不同
+            if (b.rating !== a.rating) {
+
+                return b.rating - a.rating;
+            }
+
+            // rating 相同
+            // 比较 3-0 概率
+            return (
+
+                stats[b.name].threeZero -
+
+                stats[a.name].threeZero
+            );
+        });
+
+        // 按排序后的队伍顺序，逐队加入表格
+        teamsData.forEach(team => {
+
+            // 根据队伍名，从 stats 里找到这支队伍的模拟统计
+            const teamStats = stats[team.name];
+
+            // 计算 3-0 概率
+            const threeZeroRate =
+                (
+                    teamStats.threeZero /
+                    simulationCount *
+                    100
+                ).toFixed(1);
+
+            // 计算 3-1 或 3-2 晋级概率
+            const advanceRate =
+                (
+                    teamStats.normalAdvance /
+                    simulationCount *
+                    100
+                ).toFixed(1);
+
+            // 计算 0-3 概率
+            const zeroThreeRate =
+                (
+                    teamStats.zeroThree /
+                    simulationCount *
+                    100
+                ).toFixed(1);
+
+            resultHTML += `
+
+                <tr>
+                    <td>${team.name}</td>
+                    <td>${team.rating}</td>
+                    <td>${threeZeroRate}%</td>
+                    <td>${advanceRate}%</td>
+                    <td>${zeroThreeRate}%</td>
+                </tr>
+
+            `;
+        });
+
+        // =========================
+        // 表格结束
+        // =========================
+        resultHTML += `
+            </table>
+        `;
+
+        // =========================
+        // 简单 Pick'Em 推荐
+        // 根据单项概率直接推荐
+        // =========================
+
+        // 把 stats 转成数组，方便排序
+        let recommendationData = teamsData.map(team => {
+
+            const teamStats = stats[team.name];
+
+            return {
+                name: team.name,
+                rating: team.rating,
+
+                threeZeroRate: teamStats.threeZero / simulationCount,
+                advanceRate: teamStats.normalAdvance / simulationCount,
+                zeroThreeRate: teamStats.zeroThree / simulationCount
+            };
+        });
+
+        // 0-3 推荐：选择 0-3 概率最高的 2 支队伍
+        let zeroThreePicks = [...recommendationData]
+            .sort((a, b) => b.zeroThreeRate - a.zeroThreeRate)
+            .slice(0, 2);
+
+        // 3-0 推荐：选择 3-0 概率最高的 2 支队伍
+        let threeZeroPicks = [...recommendationData]
+            .sort((a, b) => b.threeZeroRate - a.threeZeroRate)
+            .slice(0, 2);
+
+        // 普通晋级推荐：排除已经被选进 3-0 和 0-3 的队伍
+        let pickedNames = new Set([
+            ...threeZeroPicks.map(team => team.name),
+            ...zeroThreePicks.map(team => team.name)
+        ]);
+
+        let advancePicks = [...recommendationData]
+            .filter(team => !pickedNames.has(team.name))
+            .sort((a, b) => b.advanceRate - a.advanceRate)
+            .slice(0, 6);
+
+        // 生成右下角 Pick'Em 推荐内容
+        let recommendHTML = `
+
+            <h2>基础款推荐</h2>
+
+            <div class="recommendBox">
+
+                <p><strong>推荐 3-0：</strong> ${threeZeroPicks.map(team => team.name).join("，")}</p>
+
+                <p><strong>推荐晋级：</strong> ${advancePicks.map(team => team.name).join("，")}</p>
+
+                <p><strong>推荐 0-3：</strong> ${zeroThreePicks.map(team => team.name).join("，")}</p>
+
+            </div>
+
+    `;
+
+        // =========================
+        // 显示结果
+        // =========================
+        resultPanel.innerHTML = resultHTML;
+
+        // 获取推荐区域
+        const recommendPanel =
+            document.getElementById("recommendPanel");
+
+        // 显示推荐结果
+        recommendPanel.innerHTML =
+            recommendHTML;
+
+        // =========================
         // 自动滚动到结果区域
+        // =========================
         resultPanel.scrollIntoView({
 
             behavior: "smooth"

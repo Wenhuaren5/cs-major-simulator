@@ -295,3 +295,91 @@ button:disabled {
 
     background-color: #d8ffe6;
 }
+
+/* Monte Carlo 结果表格 */
+.resultTable {
+
+    margin: 30px auto;
+
+    border-collapse: collapse;
+
+    color: white;
+
+    font-size: 18px;
+
+    min-width: 500px;
+}
+
+/* 表头 */
+.resultTable th {
+
+    padding: 12px 30px;
+
+    font-size: 20px;
+}
+
+/* 表格内容 */
+.resultTable td {
+
+    padding: 10px 30px;
+
+    text-align: center;
+}
+
+/* 第一列（队伍名）左对齐 */
+.resultTable td:first-child {
+
+    text-align: left;
+}
+
+
+/* 评分列宽度 */
+.ratingColumn {
+
+    min-width: 60px;
+}
+
+/* Pick'Em 推荐区域 */
+.recommendBox {
+    margin-top: 20px;
+    font-size: 18px;
+    line-height: 1.8;
+}
+
+/* =========================
+   页面下方布局
+   左边显示模拟结果，右边显示 Pick'Em 推荐
+========================= */
+
+.bottomLayout {
+
+    display: grid;
+
+    grid-template-columns: 650px 420px;
+
+    gap: 60px;
+
+    margin-left: 120px;
+
+    margin-top: 40px;
+
+    align-items: start;
+}
+
+/* 左下：Monte Carlo 结果区域 */
+
+#resultPanel {
+
+    width: 650px;
+
+    text-align: left;
+}
+
+/* 右下：Pick'Em 推荐区域 */
+
+#recommendPanel {
+
+    width: 420px;
+
+    text-align: left;
+}

@@ -212,3 +212,72 @@ function runSimulation(teamsData, firstRoundMatches) {
     // =========================
     return teams;
 }
+
+// =========================
+// Monte Carlo 模拟
+// 重复运行大量 Swiss 模拟
+// 同时统计概率，并保存每一次模拟的完整结果
+// =========================
+function runMonteCarlo(
+    teamsData,
+    firstRoundMatches,
+    simulationCount
+) {
+
+    // 记录每支队伍的概率统计
+    let stats = {};
+
+    // 保存每一次模拟的完整结果
+    let simulationResults = [];
+
+    teamsData.forEach(team => {
+
+        stats[team.name] = {
+            threeZero: 0,
+            normalAdvance: 0,
+            zeroThree: 0
+        };
+    });
+
+    // 开始重复模拟
+    for (let i = 0; i < simulationCount; i++) {
+
+        // 运行一次完整 Swiss
+        const result = runSimulation(
+            teamsData,
+            firstRoundMatches
+        );
+
+        // 保存这一次模拟结果，之后用来算“保5推荐”
+        simulationResults.push(result);
+
+        // 统计每支队伍的结果
+        result.forEach(team => {
+
+            // 3-0
+            if (team.wins === 3 && team.losses === 0) {
+                stats[team.name].threeZero++;
+            }
+
+            // 普通晋级：3-1 或 3-2
+            if (
+                team.wins === 3 &&
+                (team.losses === 1 || team.losses === 2)
+            ) {
+                stats[team.name].normalAdvance++;
+            }
+
+            // 0-3
+            if (team.wins === 0 && team.losses === 3) {
+                stats[team.name].zeroThree++;
+            }
+        });
+    }
+
+    // stats 给概率表用
+    // simulationResults 给后面的“保5推荐”算法用
+    return {
+        stats: stats,
+        simulationResults: simulationResults
+    };
+}

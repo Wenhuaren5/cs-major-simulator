@@ -97,18 +97,29 @@
             <button id="generateButton">
                 生成队伍
             </button>
-            
+
         </div>
 
         <!-- 右侧区域：JS会把生成后的队伍列表放进 teamList 里 -->
         <div class="rightPanel">
+
+            <!-- 队伍显示区域 -->
             <div id="teamList"></div>
+
         </div>
 
     </div>
 
-    <!-- 模拟结果显示区域 -->
-    <div id="resultPanel"></div>
+    <!-- 页面下方区域：左边放模拟结果，右边放 Pick'Em 推荐 -->
+    <div class="bottomLayout">
+
+        <!-- 左下：模拟结果显示区域 -->
+        <div id="resultPanel"></div>
+
+        <!-- 右下：Pick'Em 推荐区域 -->
+        <div id="recommendPanel"></div>
+
+    </div>
 
     <!-- 连接 simulation.js，负责瑞士轮模拟、胜率计算、Monte Carlo 等核心算法 -->
     <script src="simulation.js"></script>
