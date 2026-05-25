@@ -138,7 +138,7 @@ input {
 
 .ratingInput {
 
-    width: 55px;
+    width: 40px;
 
     padding: 5px;
 
@@ -234,7 +234,7 @@ button:disabled {
 
     grid-template-columns: 1fr 1fr;
 
-    column-gap: 70px;
+    column-gap: 15px;
 
     margin-bottom: 18px;
 }
@@ -243,15 +243,21 @@ button:disabled {
 
 .teamItem {
 
-    width: 80px;
+    width: 130px;
 
     text-align: left;
 
-    font-size: 22px;
+    font-size: 16px;
 
     font-weight: bold;
 
     color: white;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
 
     text-shadow:
         -1px -1px 0 black,
@@ -268,5 +274,24 @@ button:disabled {
 
     align-items: center;
 
-    gap: 12px;
+    gap: 10px;
+}
+
+/* Stage 1 自动填入按钮 */
+#stage1Button {
+
+    background-color: #b8ffd0;
+
+    color: black;
+
+    font-size: 13px;
+
+    padding: 6px 12px;
+
+    margin-right: 10px;
+}
+
+#stage1Button:hover {
+
+    background-color: #d8ffe6;
 }

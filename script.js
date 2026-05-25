@@ -2,6 +2,38 @@
 const generateButton = document.getElementById("generateButton");
 const matchupInputs = document.querySelectorAll("#matches input");
 const teamList = document.getElementById("teamList");
+// 获取自动填入 Stage 1 的按钮
+const stage1Button = document.getElementById("stage1Button");
+// Stage 1 已确定的第一轮对阵
+const stage1Matches = [
+    ["GamerLegion", "NRG"],
+    ["B8", "TYLOO"],
+    ["HEROIC", "Sharks"],
+    ["BetBoom", "Gaimin Gladiators"],
+    ["BIG", "Liquid"],
+    ["M80", "Lynn Vision"],
+    ["MIBR", "Thunder dOWNUNDER"],
+    ["SINNERS", "FlyQuest"]
+];
+
+// 点击按钮后，自动填入 Stage 1 对阵
+stage1Button.addEventListener("click", function () {
+
+    const inputs = document.querySelectorAll("#matches input");
+
+    let index = 0;
+
+    stage1Matches.forEach(match => {
+
+        inputs[index].value = match[0];
+        inputs[index + 1].value = match[1];
+
+        index += 2;
+    });
+
+    // 自动填完后，重新检查是否有重复队伍
+    checkDuplicateTeams();
+});
 
 // 当用户修改第一轮对阵输入框时，实时检查是否有重复队伍
 matchupInputs.forEach(input => {
@@ -110,6 +142,9 @@ generateButton.addEventListener("click", function () {
         // 获取所有 rating 输入框
         const ratingInputs = document.querySelectorAll(".ratingInput");
 
+        // 获取右侧所有队伍名字
+        const teamNames = document.querySelectorAll(".teamItem");
+
         // 检查是否有空白评分
         let hasEmptyRating = false;
 
@@ -150,7 +185,81 @@ generateButton.addEventListener("click", function () {
             return;
         }
 
-        alert("开始计算概率！");
+        // =========================
+        // 读取队伍数据
+        // =========================
+        let teamsData = [];
+
+        for (let i = 0; i < teamNames.length; i++) {
+
+            teamsData.push({
+
+                name: teamNames[i].textContent,
+
+                rating: Number(ratingInputs[i].value)
+            });
+        }
+
+        // =========================
+        // 读取第一轮对阵
+        // =========================
+        const matchupInputs = document.querySelectorAll("#matches input");
+
+        let firstRoundMatches = [];
+
+        for (let i = 0; i < matchupInputs.length; i += 2) {
+
+            firstRoundMatches.push({
+
+                a: matchupInputs[i].value.trim(),
+
+                b: matchupInputs[i + 1].value.trim()
+            });
+        }
+
+        // =========================
+        // 运行一次完整模拟
+        // =========================
+        const result = runSimulation(
+            teamsData,
+            firstRoundMatches
+        );
+
+        // 在控制台输出结果
+        console.log(result);
+
+        // 先把结果整理成一段文字
+        let resultText = "本次模拟结果：\n\n";
+
+        result.forEach(team => {
+
+            resultText +=
+                team.name +
+                "：" +
+                team.wins +
+                "-" +
+                team.losses +
+                "\n";
+        });
+
+        // 获取结果区域
+        const resultPanel = document.getElementById("resultPanel");
+
+        // 把结果显示到网页
+        resultPanel.innerHTML = `
+
+            <h2>本次模拟结果</h2>
+
+            <pre>${resultText}</pre>
+
+        `;
+
+        // 自动滚动到结果区域
+        resultPanel.scrollIntoView({
+
+            behavior: "smooth"
+
+        });
 
     });
 });

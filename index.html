@@ -88,6 +88,11 @@
 
             </div>
 
+            <!-- 自动填入 Stage 1 官方对阵 -->
+            <button id="stage1Button">
+                自动填入 Stage 1
+            </button>
+
             <!-- 点击后由 script.js 读取输入框内容，并生成右侧队伍列表 -->
             <button id="generateButton">
                 生成队伍
@@ -101,6 +106,12 @@
         </div>
 
     </div>
+
+    <!-- 模拟结果显示区域 -->
+    <div id="resultPanel"></div>
+
+    <!-- 连接 simulation.js，负责瑞士轮模拟、胜率计算、Monte Carlo 等核心算法 -->
+    <script src="simulation.js"></script>
 
     <!-- 连接 JavaScript 文件，负责按钮点击、检测重复队伍、生成队伍列表等功能 -->
     <script src="script.js"></script>
