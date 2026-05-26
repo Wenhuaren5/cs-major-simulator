@@ -127,6 +127,12 @@ generateButton.addEventListener("click", function () {
     // 生成“开始模拟”按钮
     teamList.innerHTML += `
 
+        <label class="optionLabel">
+            <input type="checkbox" id="bestPickToggle">
+            计算保5最优推荐（较慢）
+        </label>
+
+
         <button id="simulateButton">
             开始模拟
         </button>
@@ -380,6 +386,50 @@ generateButton.addEventListener("click", function () {
             .filter(team => !pickedNames.has(team.name))
             .sort((a, b) => b.advanceRate - a.advanceRate)
             .slice(0, 6);
+        
+        // =========================
+        // 检查用户是否开启保5推荐
+        // =========================
+        const bestPickToggle =
+            document.getElementById("bestPickToggle");
+
+        // 默认先不给结果
+        let bestPickEm = null;
+
+        let bestRate = null;
+
+        // 如果用户勾选了
+        // 才计算保5推荐
+        if (bestPickToggle.checked) {
+
+            const allPickEms =
+
+                generatePickEmCandidates(
+                    recommendationData
+                );
+
+            const bestPickEmResult =
+
+                findBestPickEm(
+
+                    allPickEms,
+
+                    simulationResults
+                );
+
+            // 最佳 Pick'Em
+            bestPickEm =
+
+                bestPickEmResult.bestPickEm;
+
+            // 保5成功率
+            bestRate =
+
+                (
+                    bestPickEmResult.bestRate *
+                    100
+                ).toFixed(1);
+        }
 
         // 生成右下角 Pick'Em 推荐内容
         let recommendHTML = `
@@ -396,7 +446,43 @@ generateButton.addEventListener("click", function () {
 
             </div>
 
-    `;
+            ${bestPickToggle.checked ? `
+
+                <hr>
+
+                <h2>保5最优推荐</h2>
+
+                <p>
+                    <strong>保5成功率：</strong>
+                    ${bestRate}%
+                </p>
+
+                <p>
+                    <strong>最优 3-0：</strong>
+                    ${bestPickEm.threeZero.join("，")}
+                </p>
+
+                <p>
+                    <strong>最优晋级：</strong>
+                    ${bestPickEm.advance.join("，")}
+                </p>
+
+                <p>
+                    <strong>最优 0-3：</strong>
+                    ${bestPickEm.zeroThree.join("，")}
+                </p>
+
+            ` : `
+
+                <hr>
+
+                <p class="ratingTip">
+                    未计算保5最优推荐。如需使用，请勾选“计算保5最优推荐（较慢）”。
+                </p>
+
+            `}
+
+        `;
 
         // =========================
         // 显示结果
@@ -456,4 +542,154 @@ function checkDuplicateTeams() {
 
     // 如果有重复队伍，就禁止点击“生成队伍”
     generateButton.disabled = hasDuplicate;
+}
+
+// =========================
+// 从数组中生成所有指定数量的组合
+// 比如：从5个队伍里选2个
+// =========================
+function getCombinations(array, chooseCount) {
+
+    let result = [];
+
+    function backtrack(startIndex, currentCombination) {
+
+        // 如果已经选够数量，就保存这一组
+        if (currentCombination.length === chooseCount) {
+
+            result.push([...currentCombination]);
+
+            return;
+        }
+
+        // 继续往后选择队伍
+        for (let i = startIndex; i < array.length; i++) {
+
+            currentCombination.push(array[i]);
+
+            backtrack(i + 1, currentCombination);
+
+            currentCombination.pop();
+        }
+    }
+
+    backtrack(0, []);
+
+    return result;
+}
+
+
+// =========================
+// 生成可能的 Pick'Em 组合
+// 不是枚举全部16队，而是先筛选候选池
+// =========================
+function generatePickEmCandidates(recommendationData) {
+
+    // 3-0 候选：取 3-0 概率最高的前5队
+    const threeZeroCandidates = [...recommendationData]
+        .sort((a, b) => b.threeZeroRate - a.threeZeroRate)
+        .slice(0, 5);
+
+    // 晋级候选：取普通晋级概率最高的前10队
+    const advanceCandidates = [...recommendationData]
+        .sort((a, b) => b.advanceRate - a.advanceRate)
+        .slice(0, 10);
+
+    // 0-3 候选：取 0-3 概率最高的前5队
+    const zeroThreeCandidates = [...recommendationData]
+        .sort((a, b) => b.zeroThreeRate - a.zeroThreeRate)
+        .slice(0, 5);
+
+    // 分别生成不同位置的组合
+    const threeZeroCombos = getCombinations(threeZeroCandidates, 2);
+    const zeroThreeCombos = getCombinations(zeroThreeCandidates, 2);
+
+    let allPickEms = [];
+
+    // 先选3-0，再选0-3，最后选晋级队伍
+    threeZeroCombos.forEach(threeZeroCombo => {
+
+        zeroThreeCombos.forEach(zeroThreeCombo => {
+
+            // 记录已经被3-0和0-3占用的队伍
+            const usedNames = new Set([
+                ...threeZeroCombo.map(team => team.name),
+                ...zeroThreeCombo.map(team => team.name)
+            ]);
+
+            // 晋级候选里排除已经被选过的队伍
+            const availableAdvanceCandidates = advanceCandidates.filter(team =>
+                !usedNames.has(team.name)
+            );
+
+            // 如果剩下的晋级候选不够6支，就跳过这套组合
+            if (availableAdvanceCandidates.length < 6) {
+                return;
+            }
+
+            const advanceCombos = getCombinations(
+                availableAdvanceCandidates,
+                6
+            );
+
+            advanceCombos.forEach(advanceCombo => {
+
+                allPickEms.push({
+
+                    threeZero: threeZeroCombo.map(team => team.name),
+
+                    advance: advanceCombo.map(team => team.name),
+
+                    zeroThree: zeroThreeCombo.map(team => team.name)
+                });
+            });
+        });
+    });
+
+    return allPickEms;
+}
+
+// =========================
+// 找到保5成功率最高的 Pick'Em
+// =========================
+function findBestPickEm(
+
+    allPickEms,
+
+    simulationResults
+) {
+
+    // 当前最佳 Pick'Em
+    let bestPickEm = null;
+
+    // 当前最高保5成功率
+    let bestRate = 0;
+
+    // 遍历所有候选 Pick'Em
+    allPickEms.forEach(pickEm => {
+
+        // 计算这套 Pick'Em 的保5成功率
+        const rate = evaluatePickEm(
+
+            simulationResults,
+
+            pickEm
+        );
+
+        // 如果比当前最佳更高
+        if (rate > bestRate) {
+
+            bestRate = rate;
+
+            bestPickEm = pickEm;
+        }
+    });
+
+    // 返回最佳结果
+    return {
+
+        bestPickEm: bestPickEm,
+
+        bestRate: bestRate
+    };
 }

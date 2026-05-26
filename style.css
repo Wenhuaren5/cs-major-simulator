@@ -383,3 +383,26 @@ button:disabled {
 
     text-align: left;
 }
+
+/* =========================
+   保5推荐选项
+========================= */
+
+.optionLabel {
+
+    display: block;
+
+    margin-top: 15px;
+
+    font-size: 14px;
+
+    color: rgba(255,255,255,0.85);
+}
+
+/* checkbox 本身 */
+.optionLabel input {
+
+    margin-right: 8px;
+
+    transform: scale(1.1);
+}

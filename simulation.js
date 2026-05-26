@@ -281,3 +281,96 @@ function runMonteCarlo(
         simulationResults: simulationResults
     };
 }
+
+// =========================
+// 计算一套 Pick'Em 在一次模拟中命中了几个
+// pickEm 结构：
+// {
+//   threeZero: ["A", "B"],
+//   advance: ["C", "D", "E", "F", "G", "H"],
+//   zeroThree: ["I", "J"]
+// }
+// =========================
+function countCorrectPicks(simulationResult, pickEm) {
+
+    let correctCount = 0;
+
+    // 检查 3-0 预测
+    pickEm.threeZero.forEach(teamName => {
+
+        const team = simulationResult.find(
+            team => team.name === teamName
+        );
+
+        if (team.wins === 3 && team.losses === 0) {
+            correctCount++;
+        }
+    });
+
+    // 检查普通晋级预测
+    // 只要最终是 3 胜晋级，就算正确
+    pickEm.advance.forEach(teamName => {
+
+        const team = simulationResult.find(
+            team => team.name === teamName
+        );
+
+        if (team.wins === 3) {
+            correctCount++;
+        }
+    });
+
+    // 检查 0-3 预测
+    pickEm.zeroThree.forEach(teamName => {
+
+        const team = simulationResult.find(
+            team => team.name === teamName
+        );
+
+        if (team.wins === 0 && team.losses === 3) {
+            correctCount++;
+        }
+    });
+
+    return correctCount;
+}
+
+// =========================
+// 计算一套 Pick'Em 的保5成功率
+// =========================
+function evaluatePickEm(
+
+    simulationResults,
+
+    pickEm
+) {
+
+    // 成功次数
+    let successCount = 0;
+
+    // 遍历每一次 Monte Carlo 模拟结果
+    simulationResults.forEach(simulationResult => {
+
+        // 计算这次中了几个
+        const correctCount =
+            countCorrectPicks(
+                simulationResult,
+                pickEm
+            );
+
+        // 如果 >=5
+        // 就算成功
+        if (correctCount >= 5) {
+
+            successCount++;
+        }
+    });
+
+    // 返回成功率
+    return (
+
+        successCount /
+
+        simulationResults.length
+    );
+}
