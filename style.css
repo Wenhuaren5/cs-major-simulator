@@ -406,3 +406,49 @@ button:disabled {
 
     transform: scale(1.1);
 }
+
+/* 保存评分 / 读取评分按钮 */
+
+#saveRatingButton,
+#loadRatingButton {
+
+    background-color: #b8ffd0;
+
+    color: black;
+
+    font-size: 13px;
+
+    padding: 6px 12px;
+
+    margin-left: 8px;
+}
+
+/* 鼠标移动效果 */
+
+#saveRatingButton:hover,
+#loadRatingButton:hover {
+
+    background-color: #d8ffe6;
+}
+
+/* =========================
+   保存 / 读取评分提示文字
+========================= */
+
+.fadeMessage {
+
+    /* 和按钮保持距离 */
+    margin-left: 10px;
+
+    /* 小字体 */
+    font-size: 13px;
+
+    /* 亮黄色提示文字 */
+    color: #fff27a;
+
+    /* 默认透明 */
+    opacity: 0;
+
+    /* 淡出动画 */
+    transition: opacity 0.5s;
+}

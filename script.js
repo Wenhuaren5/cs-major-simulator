@@ -124,7 +124,7 @@ generateButton.addEventListener("click", function () {
 
     `;
 
-    // 生成“开始模拟”按钮
+    // 生成保存、读取、开始模拟按钮
     teamList.innerHTML += `
 
         <label class="optionLabel">
@@ -132,15 +132,113 @@ generateButton.addEventListener("click", function () {
             计算保5最优推荐（较慢）
         </label>
 
-
         <button id="simulateButton">
             开始模拟
         </button>
+
+        <button id="saveRatingButton">
+            保存评分
+        </button>
+
+        <button id="loadRatingButton">
+            读取评分
+        </button>
+
+        <span id="saveLoadMessage" class="fadeMessage"></span>
 
     `;
 
     // 获取刚刚生成的“开始模拟”按钮
     const simulateButton = document.getElementById("simulateButton");
+
+    // 获取保存评分按钮
+    const saveRatingButton =
+        document.getElementById("saveRatingButton");
+
+    // 获取读取评分按钮
+    const loadRatingButton =
+        document.getElementById("loadRatingButton");
+
+    // 获取保存 / 读取后的提示文字区域
+    const saveLoadMessage =
+        document.getElementById("saveLoadMessage");
+    
+    // =========================
+    // 保存当前评分
+    // =========================
+    saveRatingButton.addEventListener("click", () => {
+
+        // 获取所有评分输入框
+        const ratingInputs =
+            document.querySelectorAll(".ratingInput");
+
+        // 用来保存评分数据
+        let savedRatings = [];
+
+        // 遍历所有输入框
+        ratingInputs.forEach(input => {
+
+            savedRatings.push(input.value);
+        });
+
+        // 保存到浏览器本地
+        localStorage.setItem(
+
+            "savedRatings",
+
+            JSON.stringify(savedRatings)
+        );
+
+        saveLoadMessage.textContent = "评分已保存！";
+        saveLoadMessage.style.opacity = "1";
+
+        setTimeout(() => {
+            saveLoadMessage.style.opacity = "0";
+        }, 1500);
+    });
+
+    // =========================
+    // 读取之前保存的评分
+    // =========================
+    loadRatingButton.addEventListener("click", () => {
+
+        // 从浏览器读取保存的数据
+        const savedRatings = localStorage.getItem(
+            "savedRatings"
+        );
+
+        // 如果没有保存过
+        if (!savedRatings) {
+
+            alert("没有找到已保存的评分！");
+
+            return;
+        }
+
+        // 转回数组
+        const ratingArray =
+            JSON.parse(savedRatings);
+
+        // 获取所有评分输入框
+        const ratingInputs =
+            document.querySelectorAll(".ratingInput");
+
+        // 把评分重新填回输入框
+        ratingInputs.forEach((input, index) => {
+
+            if (ratingArray[index] !== undefined) {
+
+                input.value = ratingArray[index];
+            }
+        });
+
+        saveLoadMessage.textContent = "评分已读取！";
+        saveLoadMessage.style.opacity = "1";
+
+        setTimeout(() => {
+            saveLoadMessage.style.opacity = "0";
+        }, 1500);
+    });
 
     // 点击按钮后的测试
     simulateButton.addEventListener("click", function () {
