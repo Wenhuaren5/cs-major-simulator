@@ -2,130 +2,99 @@
 <html lang="zh">
 
 <head>
-    <!-- 网页基础设置：编码、适配屏幕、标题、连接CSS样式文件 -->
+    <!-- 网页基础设置 -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Major瑞士轮模拟器</title>
+    <title>科隆Major作业模拟器</title>
+
+    <!-- 连接统一样式文件 -->
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <!-- 网页主标题 -->
-    <h1>科隆Major瑞士轮模拟器</h1>
+    <!-- 整个主页布局：左边导航，右边主页内容 -->
+    <div class="homeLayout">
 
-    <!-- 页面主体：左边输入对阵，右边显示生成后的队伍列表 -->
-    <div class="mainLayout">
+        <!-- 左侧导航栏 -->
+        <nav class="sideNav">
 
-        <!-- 左侧区域：用户输入第一轮8组对阵 -->
-        <div class="leftPanel">
+            <h2>功能列表</h2>
 
-            <p>
-                输入第一轮对阵，然后生成队伍。
+            <!-- 已完成：跳转到 Stage 1 模拟器 -->
+            <a href="simulator_stage1.html" class="navItem">
+                Stage 1 Simulator
+            </a>
+
+            <!-- 已完成：用于实时计算 Stage 1 作业通过率 -->
+            <a href="test_stage1.html" class="navItem">
+
+                Stage 1 作业实时通过率
+
+            </a>
+
+            <!-- 开发中：以后用于 Stage 2 模拟 -->
+            <div class="navItem disabledNav">
+                Stage 2 Simulator
+            </div>
+
+            <!-- 开发中：以后继续扩展 -->
+            <div class="navItem disabledNav">
+                Stage 2 作业实时检测
+            </div>
+
+            <div class="navItem disabledNav">
+                Stage 3 Simulator
+            </div>
+
+            <div class="navItem disabledNav">
+                Stage 3 作业实时检测
+            </div>
+
+        </nav>
+
+        <!-- 右侧主页内容 -->
+        <main class="homeContent">
+
+            <h1>科隆Major瑞士轮作业小程序</h1>
+
+            <p class="homeIntro">
+                这是一个用于 CS Major 瑞士轮 Pick'Em 作业分析的小工具。
             </p>
 
-            <!-- 第一轮对阵输入区域 -->
-            <div id="matches">
+            <div class="homeCard">
 
-                <h2>Round 1 Matchups</h2>
+                <h2>当前可用功能</h2>
 
-                <!-- 每一个 match 表示一组第一轮对阵 -->
-                <div class="match">
-                    <span class="matchLabel">第一组：</span>
-                    <input type="text" placeholder="Team A">
-                    VS
-                    <input type="text" placeholder="Team B">
-                </div>
-
-                <div class="match">
-                    <span class="matchLabel">第二组：</span>
-                    <input type="text" placeholder="Team A">
-                    VS
-                    <input type="text" placeholder="Team B">
-                </div>
-
-                <div class="match">
-                    <span class="matchLabel">第三组：</span>
-                    <input type="text" placeholder="Team A">
-                    VS
-                    <input type="text" placeholder="Team B">
-                </div>
-
-                <div class="match">
-                    <span class="matchLabel">第四组：</span>
-                    <input type="text" placeholder="Team A">
-                    VS
-                    <input type="text" placeholder="Team B">
-                </div>
-
-                <div class="match">
-                    <span class="matchLabel">第五组：</span>
-                    <input type="text" placeholder="Team A">
-                    VS
-                    <input type="text" placeholder="Team B">
-                </div>
-
-                <div class="match">
-                    <span class="matchLabel">第六组：</span>
-                    <input type="text" placeholder="Team A">
-                    VS
-                    <input type="text" placeholder="Team B">
-                </div>
-
-                <div class="match">
-                    <span class="matchLabel">第七组：</span>
-                    <input type="text" placeholder="Team A">
-                    VS
-                    <input type="text" placeholder="Team B">
-                </div>
-
-                <div class="match">
-                    <span class="matchLabel">第八组：</span>
-                    <input type="text" placeholder="Team A">
-                    VS
-                    <input type="text" placeholder="Team B">
-                </div>
+                <p>
+                    Stage 1 Simulator：输入战队评分，进行 Monte Carlo 模拟，并生成 Pick'Em 推荐。
+                </p>
 
             </div>
 
-            <!-- 自动填入 Stage 1 官方对阵 -->
-            <button id="stage1Button">
-                自动填入 Stage 1
-            </button>
+            <div class="homeCard">
 
-            <!-- 点击后由 script.js 读取输入框内容，并生成右侧队伍列表 -->
-            <button id="generateButton">
-                生成队伍
-            </button>
+                <h2>开发计划</h2>
 
-        </div>
+                <p>
+                    v3.0 将加入作业实时检测功能。用户可以根据现实比赛结果，计算自己的 Pick'Em 通过率。
+                </p>
 
-        <!-- 右侧区域：JS会把生成后的队伍列表放进 teamList 里 -->
-        <div class="rightPanel">
+            </div>
 
-            <!-- 队伍显示区域 -->
-            <div id="teamList"></div>
+            <div class="homeCard">
 
-        </div>
+                <h2>当前版本</h2>
 
-    </div>
+                <p>
+                    v3.0-dev
+                </p>
 
-    <!-- 页面下方区域：左边放模拟结果，右边放 Pick'Em 推荐 -->
-    <div class="bottomLayout">
+            </div>
 
-        <!-- 左下：模拟结果显示区域 -->
-        <div id="resultPanel"></div>
-
-        <!-- 右下：Pick'Em 推荐区域 -->
-        <div id="recommendPanel"></div>
+        </main>
 
     </div>
-
-    <!-- 连接 simulation.js，负责瑞士轮模拟、胜率计算、Monte Carlo 等核心算法 -->
-    <script src="simulation.js"></script>
-
-    <!-- 连接 JavaScript 文件，负责按钮点击、检测重复队伍、生成队伍列表等功能 -->
-    <script src="script.js"></script>
 
 </body>
 

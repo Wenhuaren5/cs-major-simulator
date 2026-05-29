@@ -451,4 +451,372 @@ button:disabled {
 
     /* 淡出动画 */
     transition: opacity 0.5s;
+
+    white-space: nowrap;
+}
+
+/* =========================
+   主页整体布局
+========================= */
+
+.homeLayout {
+
+    display: grid;
+
+    grid-template-columns: 260px 1fr;
+
+    gap: 40px;
+
+    min-height: 80vh;
+
+    text-align: left;
+}
+
+/* =========================
+   主页左侧导航栏
+========================= */
+
+.sideNav {
+
+    background-color: rgba(0, 40, 20, 0.55);
+
+    border: 2px solid rgba(120, 255, 160, 0.5);
+
+    border-radius: 12px;
+
+    padding: 20px;
+}
+
+/* 导航栏标题 */
+
+.sideNav h2 {
+
+    text-align: center;
+
+    margin-bottom: 20px;
+}
+
+/* 每一个导航选项 */
+
+.navItem {
+
+    display: block;
+
+    padding: 12px 15px;
+
+    margin-bottom: 12px;
+
+    border-radius: 8px;
+
+    background-color: rgba(120, 255, 160, 0.15);
+
+    color: white;
+
+    text-decoration: none;
+
+    font-weight: bold;
+}
+
+/* 鼠标移动到可点击选项上 */
+
+.navItem:hover {
+
+    background-color: rgba(120, 255, 160, 0.35);
+}
+
+/* 开发中的选项 */
+
+.disabledNav {
+
+    opacity: 0.45;
+
+    cursor: not-allowed;
+}
+
+/* =========================
+   主页右侧内容区
+========================= */
+
+.homeContent {
+
+    padding: 20px;
+}
+
+/* 主页介绍文字 */
+
+.homeIntro {
+
+    font-size: 18px;
+
+    margin-bottom: 30px;
+}
+
+/* 主页信息卡片 */
+
+.homeCard {
+
+    background-color: rgba(0, 40, 20, 0.45);
+
+    border: 1px solid rgba(120, 255, 160, 0.35);
+
+    border-radius: 12px;
+
+    padding: 20px;
+
+    margin-bottom: 20px;
+}
+
+/* =========================
+   返回主页按钮
+========================= */
+
+.backButton {
+
+    /* 固定在页面左上角 */
+    position: fixed;
+
+    top: 20px;
+
+    left: 20px;
+
+    z-index: 999;
+
+    padding: 10px 16px;
+
+    border-radius: 8px;
+
+    background-color: rgba(120, 255, 160, 0.15);
+
+    color: white;
+
+    text-decoration: none;
+
+    font-weight: bold;
+}
+
+/* 鼠标悬停效果 */
+
+.backButton:hover {
+
+    background-color: rgba(120, 255, 160, 0.35);
+}
+
+/* =========================
+   Stage 1 实时检测页面
+========================= */
+
+/* 一场比赛 */
+
+.matchRow {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 4px;
+}
+
+/* 队伍按钮 */
+
+.teamButton {
+
+    width: 110px;
+
+    height: 36px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background-color: rgba(
+        120,
+        255,
+        160,
+        0.15
+    );
+
+    color: white;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    /* 名字过长显示省略号 */
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+/* 鼠标悬停效果 */
+
+.teamButton:hover {
+
+    background-color: rgba(
+        120,
+        255,
+        160,
+        0.35
+    );
+}
+
+/* VS文字 */
+
+.vsText {
+
+    font-weight: bold;
+}
+
+/* =========================
+   Stage 1 作业检测页面布局
+========================= */
+
+.testLayout {
+
+    display: grid;
+
+    grid-template-columns: 320px 1fr;
+
+    gap: 15px;
+
+    margin-top: 30px;
+
+    align-items: start;
+}
+
+/* 左侧 Pick'Em 面板 */
+
+.pickemPanel {
+
+    background-color: rgba(0, 40, 20, 0.55);
+
+    border: 2px solid rgba(120, 255, 160, 0.5);
+
+    border-radius: 12px;
+
+    padding: 20px;
+
+    text-align: left;
+}
+
+/* Pick'Em 下拉框 */
+
+.pickSelect {
+
+    width: 120px;
+
+    padding: 6px;
+
+    border-radius: 6px;
+}
+
+/* =========================
+   Pick'Em 一行两个选择框
+========================= */
+
+.pickRow {
+
+    display: flex;
+
+    gap: 10px;
+
+    margin-bottom: 10px;
+}
+
+/* =========================
+   作业检测页面：右侧对阵区域
+========================= */
+
+#matchContainer {
+
+    /* 让整个对阵区靠左，而不是居中 */
+    justify-self: start;
+
+    /* 稍微靠近左侧 Pick'Em 面板 */
+    margin-left: 0;
+}
+
+/* =========================
+   获胜队伍
+========================= */
+
+.winnerButton {
+
+    background-color: rgba(
+        120,
+        255,
+        160,
+        0.8
+    ) !important;
+
+    color: black;
+}
+
+/* =========================
+   失败队伍
+========================= */
+
+.loserButton {
+
+    opacity: 0.35;
+}
+
+/* =========================
+   Round 2 分组显示区域
+========================= */
+
+.roundPanel {
+
+    text-align: left;
+}
+
+/* 1-0 和 0-1 横向排列 */
+
+.poolLayout {
+
+    display: flex;
+
+    gap: 20px;
+
+    margin-top: 20px;
+}
+
+/* 单个分组盒子 */
+
+.poolBox {
+
+    background-color: rgba(0, 40, 20, 0.55);
+
+    border: 1px solid rgba(120, 255, 160, 0.45);
+
+    border-radius: 10px;
+
+    padding: 15px;
+
+    width: 180px;
+}
+
+/* 分组里的队伍 */
+
+.poolTeam {
+
+    padding: 6px 8px;
+
+    margin-bottom: 6px;
+
+    border-radius: 6px;
+
+    background-color: rgba(120, 255, 160, 0.15);
+
+    font-weight: bold;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
 }
