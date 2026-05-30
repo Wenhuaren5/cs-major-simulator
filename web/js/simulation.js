@@ -1,11 +1,11 @@
 // =========================
 // 队伍对象
-// 保存每支队伍在一次模拟中的状态
 // =========================
 class Team {
-    constructor(name, rating) {
+    constructor(name, rating, seed) {
         this.name = name;
         this.rating = rating;
+        this.seed = seed;
 
         this.wins = 0;
         this.losses = 0;
@@ -19,8 +19,6 @@ class Team {
 
 // =========================
 // 根据双方评分计算 A 队胜率
-// 评分每高 1 分，胜率增加 5%
-// 最低 5%，最高 95%
 // =========================
 function getWinProbability(ratingA, ratingB) {
     let p = 0.5 + (ratingA - ratingB) * 0.05;
@@ -32,7 +30,7 @@ function getWinProbability(ratingA, ratingB) {
 }
 
 // =========================
-// 检查两队是否已经交手过
+// 检查两队是否交手过
 // =========================
 function playedBefore(team, opponentName) {
     return team.opponents.includes(opponentName);
@@ -40,13 +38,13 @@ function playedBefore(team, opponentName) {
 
 // =========================
 // 模拟一场比赛
-// match = { a: Team, b: Team }
 // =========================
 function playMatch(match) {
     const teamA = match.a;
     const teamB = match.b;
 
-    const probabilityA = getWinProbability(teamA.rating, teamB.rating);
+    const probabilityA =
+        getWinProbability(teamA.rating, teamB.rating);
 
     let winner;
     let loser;
@@ -75,15 +73,40 @@ function playMatch(match) {
 }
 
 // =========================
-// 根据当前战绩生成下一轮瑞士轮对阵
-// 同战绩分组，组内按 rating 排序
-// 强队优先匹配弱队，并尽量避免重复交手
+// 计算 Buchholz 分数
+// Buchholz = 所有对手当前胜场数之和
+// =========================
+function getBuchholzScore(team, allTeams) {
+    let score = 0;
+
+    team.opponents.forEach(opponentName => {
+        const opponent = allTeams.find(
+            t => t.name === opponentName
+        );
+
+        if (opponent) {
+            score += opponent.wins;
+        }
+    });
+
+    return score;
+}
+
+// =========================
+// 根据当前战绩生成下一轮对阵
+// 规则：
+// 1. 同战绩分组
+// 2. Buchholz 高的排前面
+// 3. Buchholz 相同则 seed 小的排前面
+// 4. 高排名优先打低排名
+// 5. 尽量避免重复交手
 // =========================
 function generateNextRound(teams) {
     let matches = [];
 
     for (let w = 0; w <= 2; w++) {
         for (let l = 0; l <= 2; l++) {
+
             let group = teams.filter(team =>
                 !team.advanced &&
                 !team.eliminated &&
@@ -95,10 +118,23 @@ function generateNextRound(teams) {
                 continue;
             }
 
-            group.sort((x, y) => y.rating - x.rating);
+            group.sort((a, b) => {
+                const buchholzA =
+                    getBuchholzScore(a, teams);
+
+                const buchholzB =
+                    getBuchholzScore(b, teams);
+
+                if (buchholzB !== buchholzA) {
+                    return buchholzB - buchholzA;
+                }
+
+                return a.seed - b.seed;
+            });
 
             while (group.length >= 2) {
                 const teamA = group[0];
+
                 let opponentIndex = -1;
 
                 for (let i = group.length - 1; i >= 1; i--) {
@@ -129,109 +165,75 @@ function generateNextRound(teams) {
 }
 
 // =========================
-// 运行一次完整的瑞士轮模拟
-// teamsData:
-// [
-//   { name: "Spirit", rating: 8 },
-//   { name: "FaZe", rating: 7 }
-// ]
+// 运行一次完整瑞士轮模拟
+// 注意：teamsData 的顺序就是 HLTV 内部 seed 顺序
+// index + 1 会变成 seed
 // =========================
 function runSimulation(teamsData, firstRoundMatches) {
-
-    // =========================
-    // 创建本次模拟使用的队伍对象
-    // =========================
     let teams = [];
 
-    teamsData.forEach(team => {
-
+    teamsData.forEach((team, index) => {
         teams.push(
-            new Team(team.name, team.rating)
+            new Team(
+                team.name,
+                team.rating,
+                index + 1
+            )
         );
     });
 
-    // =========================
-    // 方便通过名字快速找到队伍
-    // 比如：teamMap["Spirit"]
-    // =========================
     let teamMap = {};
 
     teams.forEach(team => {
         teamMap[team.name] = team;
     });
 
-    // =========================
-    // 第一轮比赛
-    // 使用用户输入的固定对阵
-    // =========================
     let currentMatches = [];
 
     firstRoundMatches.forEach(match => {
-
         currentMatches.push({
-
             a: teamMap[match.a],
-
             b: teamMap[match.b]
         });
     });
 
-    // 打完第一轮
     currentMatches.forEach(match => {
         playMatch(match);
     });
 
-    // =========================
-    // 后续轮次
-    // 一直打到所有队伍晋级或淘汰
-    // =========================
     while (true) {
-
-        // 检查是否已经结束
         let unfinishedTeams = teams.filter(team =>
             !team.advanced &&
             !team.eliminated
         );
 
-        // 如果所有队伍都结束
         if (unfinishedTeams.length === 0) {
             break;
         }
 
-        // 生成下一轮对阵
-        currentMatches = generateNextRound(teams);
+        currentMatches =
+            generateNextRound(teams);
 
-        // 打完这一轮
         currentMatches.forEach(match => {
             playMatch(match);
         });
     }
 
-    // =========================
-    // 返回本次模拟最终结果
-    // =========================
     return teams;
 }
 
 // =========================
 // Monte Carlo 模拟
-// 重复运行大量 Swiss 模拟
-// 同时统计概率，并保存每一次模拟的完整结果
 // =========================
 function runMonteCarlo(
     teamsData,
     firstRoundMatches,
     simulationCount
 ) {
-
-    // 记录每支队伍的概率统计
     let stats = {};
-
-    // 保存每一次模拟的完整结果
     let simulationResults = [];
 
     teamsData.forEach(team => {
-
         stats[team.name] = {
             threeZero: 0,
             normalAdvance: 0,
@@ -239,27 +241,20 @@ function runMonteCarlo(
         };
     });
 
-    // 开始重复模拟
     for (let i = 0; i < simulationCount; i++) {
+        const result =
+            runSimulation(
+                teamsData,
+                firstRoundMatches
+            );
 
-        // 运行一次完整 Swiss
-        const result = runSimulation(
-            teamsData,
-            firstRoundMatches
-        );
-
-        // 保存这一次模拟结果，之后用来算“保5推荐”
         simulationResults.push(result);
 
-        // 统计每支队伍的结果
         result.forEach(team => {
-
-            // 3-0
             if (team.wins === 3 && team.losses === 0) {
                 stats[team.name].threeZero++;
             }
 
-            // 普通晋级：3-1 或 3-2
             if (
                 team.wins === 3 &&
                 (team.losses === 1 || team.losses === 2)
@@ -267,15 +262,12 @@ function runMonteCarlo(
                 stats[team.name].normalAdvance++;
             }
 
-            // 0-3
             if (team.wins === 0 && team.losses === 3) {
                 stats[team.name].zeroThree++;
             }
         });
     }
 
-    // stats 给概率表用
-    // simulationResults 给后面的“保5推荐”算法用
     return {
         stats: stats,
         simulationResults: simulationResults
@@ -283,21 +275,12 @@ function runMonteCarlo(
 }
 
 // =========================
-// 计算一套 Pick'Em 在一次模拟中命中了几个
-// pickEm 结构：
-// {
-//   threeZero: ["A", "B"],
-//   advance: ["C", "D", "E", "F", "G", "H"],
-//   zeroThree: ["I", "J"]
-// }
+// 计算一套 Pick'Em 命中几个
 // =========================
 function countCorrectPicks(simulationResult, pickEm) {
-
     let correctCount = 0;
 
-    // 检查 3-0 预测
     pickEm.threeZero.forEach(teamName => {
-
         const team = simulationResult.find(
             team => team.name === teamName
         );
@@ -307,10 +290,7 @@ function countCorrectPicks(simulationResult, pickEm) {
         }
     });
 
-    // 检查普通晋级预测
-    // 只要最终是 3 胜晋级，就算正确
     pickEm.advance.forEach(teamName => {
-
         const team = simulationResult.find(
             team => team.name === teamName
         );
@@ -320,9 +300,7 @@ function countCorrectPicks(simulationResult, pickEm) {
         }
     });
 
-    // 检查 0-3 预测
     pickEm.zeroThree.forEach(teamName => {
-
         const team = simulationResult.find(
             team => team.name === teamName
         );
@@ -339,38 +317,25 @@ function countCorrectPicks(simulationResult, pickEm) {
 // 计算一套 Pick'Em 的保5成功率
 // =========================
 function evaluatePickEm(
-
     simulationResults,
-
     pickEm
 ) {
-
-    // 成功次数
     let successCount = 0;
 
-    // 遍历每一次 Monte Carlo 模拟结果
     simulationResults.forEach(simulationResult => {
-
-        // 计算这次中了几个
         const correctCount =
             countCorrectPicks(
                 simulationResult,
                 pickEm
             );
 
-        // 如果 >=5
-        // 就算成功
         if (correctCount >= 5) {
-
             successCount++;
         }
     });
 
-    // 返回成功率
     return (
-
         successCount /
-
         simulationResults.length
     );
 }

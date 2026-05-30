@@ -820,3 +820,63 @@ button:disabled {
 
     text-overflow: ellipsis;
 }
+
+/* =========================
+   瑞士轮三列布局
+========================= */
+
+.roundsLayout {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 20px;
+}
+
+/* 每一轮的列 */
+
+.roundColumn {
+
+    width: 260px;
+
+    min-height: 500px;
+
+    background-color: rgba(0, 40, 20, 0.35);
+
+    border: 1px solid rgba(120, 255, 160, 0.35);
+
+    border-radius: 12px;
+
+    padding: 15px;
+
+    text-align: center;
+}
+
+/* 每一轮标题 */
+
+.roundColumn h2 {
+
+    margin-top: 0;
+
+    margin-bottom: 15px;
+}
+
+/* =========================
+   Round 2 内部分组
+========================= */
+
+.roundGroup {
+
+    margin-bottom: 25px;
+}
+
+/* Round 2 分组标题 */
+
+.roundGroup h3 {
+
+    margin-bottom: 12px;
+
+    text-align: center;
+}
+

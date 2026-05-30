@@ -8,13 +8,13 @@
     <title>Stage 1 作业实时检测</title>
 
     <!-- 使用原有样式文件 -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 
 <body>
 
     <!-- 返回主页按钮 -->
-    <a href="index.html" class="backButton">
+    <a href="../index.html" class="backButton">
         ← 返回主页
     </a>
 
@@ -88,16 +88,44 @@
 
         </div>
 
-        <!-- 右侧：比赛对阵显示区域 -->
-        <div class="roundPanel">
+        <!-- 右侧：瑞士轮三列显示区域 -->
+        <div class="roundsLayout">
 
-            <!-- Round 1 对阵 -->
-            <div id="matchContainer"></div>
+            <!-- 第一列：Round 1 -->
+            <div class="roundColumn">
 
-            <!-- Round 2 分组显示区域 -->
-            <div id="round2PoolContainer"></div>
+                <h2>Round 1</h2>
+
+                <div id="matchContainer"></div>
+
+            </div>
+
+            <!-- 第二列：Round 2 -->
+            <div class="roundColumn">
+
+                <h2>Round 2</h2>
+
+                <div id="round2PoolContainer"></div>
+
+            </div>
+
+            <!-- 第三列：Round 3 -->
+            <div class="roundColumn">
+
+                <h2>Round 3</h2>
+
+                <div id="round3Container">
+
+                        <p class="ratingTip">
+                        等待 Round 2 结果
+                    </p>
+
+                </div>
+
+            </div>
 
         </div>
+
     </div>
 
     <script>
@@ -114,6 +142,29 @@
             ["MIBR", "Thunder dOWNUNDER"],
             ["SINNERS", "FlyQuest"]
         ];
+
+        // =========================
+        // HLTV Simulator 内部种子顺序
+        // 用于后续瑞士轮配对
+        // =========================
+        const seedOrder = {
+            "GamerLegion": 1,
+            "B8": 2,
+            "HEROIC": 3,
+            "BetBoom": 4,
+            "BIG": 5,
+            "M80": 6,
+            "MIBR": 7,
+            "SINNERS": 8,
+            "NRG": 9,
+            "TYLOO": 10,
+            "Sharks": 11,
+            "Gaimin Gladiators": 12,
+            "Liquid": 13,
+            "Lynn Vision": 14,
+            "Thunder dOWNUNDER": 15,
+            "FlyQuest": 16
+        };
 
         // 获取对阵显示区域
         const matchContainer = document.getElementById("matchContainer");
@@ -430,6 +481,40 @@
             });
 
         // =========================
+        // 按种子顺序排序队伍
+        // =========================
+        function sortTeamsBySeed(teams) {
+
+            return [...teams].sort((a, b) => {
+
+                return seedOrder[a] - seedOrder[b];
+            });
+        }
+
+        // =========================
+        // 高种子 vs 低种子配对
+        // 例如 1,2,3,4,5,6,7,8
+        // 变成 1vs8, 2vs7, 3vs6, 4vs5
+        // =========================
+        function createSeedMatchups(teams) {
+
+            const sortedTeams =
+                sortTeamsBySeed(teams);
+
+            let matchups = [];
+
+            for (let i = 0; i < sortedTeams.length / 2; i++) {
+
+                matchups.push([
+                    sortedTeams[i],
+                    sortedTeams[sortedTeams.length - 1 - i]
+                ]);
+            }
+
+            return matchups;
+        }
+
+        // =========================
         // 根据 Round 1 结果生成 1-0 和 0-1 分组
         // =========================
         function updateRound2Pools() {
@@ -464,34 +549,64 @@
                 zeroOneTeams.push(loser);
             });
 
-            // 显示分组结果
+            // =========================
+            // 根据队伍列表生成对阵 HTML
+            // 按 HLTV 种子逻辑：高种子 vs 低种子
+            // =========================
+            function createMatchupsHTML(teams) {
+
+                const matchups =
+                    createSeedMatchups(teams);
+
+                let html = "";
+
+                matchups.forEach(match => {
+
+                    const teamA = match[0];
+                    const teamB = match[1];
+
+                    html += `
+
+                        <div class="matchRow">
+
+                            <button class="teamButton">
+                                ${teamA}
+                            </button>
+
+                            <span class="vsText">
+                                VS
+                            </span>
+
+                            <button class="teamButton">
+                                ${teamB}
+                            </button>
+
+                        </div>
+
+                    `;
+                });
+
+                return html;
+            }
+
+            // =========================
+            // 显示 Round 2 对阵
+            // =========================
             round2PoolContainer.innerHTML = `
 
-                <div class="poolLayout">
+                <div class="roundGroup">
 
-                    <div class="poolBox">
+                    <h3>1-0</h3>
 
-                        <h3>1-0 Pool</h3>
+                    ${createMatchupsHTML(oneZeroTeams)}
 
-                        ${oneZeroTeams.map(team => `
-                           <div class="poolTeam">
-                                ${team}
-                            </div>
-                        `).join("")}
+                </div>
 
-                    </div>
+                <div class="roundGroup">
 
-                    <div class="poolBox">
+                    <h3>0-1</h3>
 
-                        <h3>0-1 Pool</h3>
-
-                        ${zeroOneTeams.map(team => `
-                           <div class="poolTeam">
-                                ${team}
-                            </div>
-                        `).join("")}
-
-                    </div>
+                    ${createMatchupsHTML(zeroOneTeams)}
 
                 </div>
 
