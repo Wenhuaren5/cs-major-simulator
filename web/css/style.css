@@ -1,591 +1,76 @@
-/* =========================
-   整个网页的基础设置
-   控制背景、字体、整体边距
-========================= */
-
 body {
-    background: linear-gradient(to bottom, #123524, #08150f);
+    margin: 0;
+    min-height: 100vh;
+
+    background:
+        linear-gradient(
+            to bottom,
+            #1a7f42 0%,
+            #175a32 45%,
+            #02290f 100%
+        );
+
     color: white;
-
     font-family: Arial, sans-serif;
-
-    text-align: center;
-
-    padding: 40px;
 }
 
-/* =========================
-   网页主标题样式
-========================= */
+.homeContainer {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 24px;
+    text-align: center;
+}
 
 h1 {
-    color: white;
-
-    text-shadow:
-        -2px -2px 0 black,
-         2px -2px 0 black,
-        -2px  2px 0 black,
-         2px  2px 0 black;
+    font-size: 42px;
+    margin-bottom: 10px;
 }
 
-/* =========================
-   页面主体布局
-   左边输入区 + 右边队伍区
-========================= */
+.subtitle {
+    color: #b8d8c0;
+    margin-bottom: 40px;
+}
 
-.mainLayout {
-
+.homeGrid {
     display: grid;
-
-    grid-template-columns: 700px 280px;
-
-    justify-content: flex-start;
-
-    margin-left: 120px;
-
-    align-items: start;
-
-    gap: 60px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
 }
-
-/* 左侧输入区域 */
-
-.leftPanel {
-    width: 650px;
-}
-
-/* 右侧队伍显示区域 */
-
-.rightPanel {
-
-    width: 420px;
-
-    min-height: 500px;
-
-    background-color: rgba(0, 40, 20, 0.55);
-
-    border: 2px solid rgba(120, 255, 160, 0.5);
-
-    border-radius: 12px;
-
-    padding: 20px;
-
-    text-align: left;
-}
-
-/* 右侧区域标题 */
-
-.rightPanel h2 {
-
-    text-align: center;
-
-    color: white;
-
-    text-shadow:
-        -1px -1px 0 black,
-         1px -1px 0 black,
-        -1px  1px 0 black,
-         1px  1px 0 black;
-}
-
-/* =========================
-   第一轮对阵区域
-========================= */
-
-/* 每一组对阵 */
-
-.match {
-    margin: 10px;
-}
-
-/* “第一组”“第二组” 等标签 */
-
-.matchLabel {
-
-    color: white;
-
-    text-shadow:
-        -1px -1px 0 black,
-         1px -1px 0 black,
-        -1px  1px 0 black,
-         1px  1px 0 black;
-
-    font-weight: bold;
-
-    margin-right: 20px;
-
-    width: 80px;
-
-    display: inline-block;
-}
-
-/* =========================
-   输入框样式
-========================= */
-
-/* 普通输入框 */
-
-input {
-
-    padding: 8px;
-
-    width: 150px;
-
-    margin: 5px;
-}
-
-/* Rating 输入框 */
-
-.ratingInput {
-
-    width: 40px;
-
-    padding: 5px;
-
-    font-size: 16px;
-}
-
-/* 输入重复队伍时，输入框标红 */
-
-.duplicateInput {
-
-    border: 3px solid red;
-
-    background-color: #ffd6d6;
-}
-
-/* =========================
-   按钮样式
-========================= */
-
-button {
-
-    background-color: #6dff9b;
-
-    color: black;
-
-    border: none;
-
-    padding: 10px 20px;
-
-    font-size: 16px;
-
-    cursor: pointer;
-
-    border-radius: 8px;
-
-    margin-top: 20px;
-}
-
-/* 鼠标移动到按钮上 */
-
-button:hover {
-    background-color: #9dffba;
-}
-
-/* 按钮被禁用时 */
-
-button:disabled {
-
-    background-color: gray;
-
-    cursor: not-allowed;
-
-    color: #dddddd;
-}
-
-/* =========================
-   队伍列表区域
-========================= */
-
-#teamList {
-
-    margin-top: 10px;
-
-    font-size: 18px;
-}
-
-/* 队伍列表标题下方的小提示 */
-
-.teamHeader {
-    margin-bottom: 25px;
-}
-
-/* “请输入你对这支战队的评分” 提示 */
-
-.ratingTip {
-
-    font-size: 12px;
-
-    color: rgba(255,255,255,0.75);
-
-    margin-top: -10px;
-}
-
-/* =========================
-   队伍列表布局
-========================= */
-
-/* 每一行放两个队伍 */
-
-.teamRow {
-
-    display: grid;
-
-    grid-template-columns: 1fr 1fr;
-
-    column-gap: 15px;
-
-    margin-bottom: 18px;
-}
-
-/* 单个队伍名称 */
-
-.teamItem {
-
-    width: 130px;
-
-    text-align: left;
-
-    font-size: 16px;
-
-    font-weight: bold;
-
-    color: white;
-
-    white-space: nowrap;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-
-    text-shadow:
-        -1px -1px 0 black,
-         1px -1px 0 black,
-        -1px  1px 0 black,
-         1px  1px 0 black;
-}
-
-/* 队伍名 + Rating 输入框 */
-
-.teamRatingBox {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-}
-
-/* Stage 1 自动填入按钮 */
-#stage1Button {
-
-    background-color: #b8ffd0;
-
-    color: black;
-
-    font-size: 13px;
-
-    padding: 6px 12px;
-
-    margin-right: 10px;
-}
-
-#stage1Button:hover {
-
-    background-color: #d8ffe6;
-}
-
-/* Monte Carlo 结果表格 */
-.resultTable {
-
-    margin: 30px auto;
-
-    border-collapse: collapse;
-
-    color: white;
-
-    font-size: 18px;
-
-    min-width: 500px;
-}
-
-/* 表头 */
-.resultTable th {
-
-    padding: 12px 30px;
-
-    font-size: 20px;
-}
-
-/* 表格内容 */
-.resultTable td {
-
-    padding: 10px 30px;
-
-    text-align: center;
-}
-
-/* 第一列（队伍名）左对齐 */
-.resultTable td:first-child {
-
-    text-align: left;
-}
-
-
-/* 评分列宽度 */
-.ratingColumn {
-
-    min-width: 60px;
-}
-
-/* Pick'Em 推荐区域 */
-.recommendBox {
-    margin-top: 20px;
-    font-size: 18px;
-    line-height: 1.8;
-}
-
-/* =========================
-   页面下方布局
-   左边显示模拟结果，右边显示 Pick'Em 推荐
-========================= */
-
-.bottomLayout {
-
-    display: grid;
-
-    grid-template-columns: 650px 420px;
-
-    gap: 60px;
-
-    margin-left: 120px;
-
-    margin-top: 40px;
-
-    align-items: start;
-}
-
-/* 左下：Monte Carlo 结果区域 */
-
-#resultPanel {
-
-    width: 650px;
-
-    text-align: left;
-}
-
-/* 右下：Pick'Em 推荐区域 */
-
-#recommendPanel {
-
-    width: 420px;
-
-    text-align: left;
-}
-
-/* =========================
-   保5推荐选项
-========================= */
-
-.optionLabel {
-
-    display: block;
-
-    margin-top: 15px;
-
-    font-size: 14px;
-
-    color: rgba(255,255,255,0.85);
-}
-
-/* checkbox 本身 */
-.optionLabel input {
-
-    margin-right: 8px;
-
-    transform: scale(1.1);
-}
-
-/* 保存评分 / 读取评分按钮 */
-
-#saveRatingButton,
-#loadRatingButton {
-
-    background-color: #b8ffd0;
-
-    color: black;
-
-    font-size: 13px;
-
-    padding: 6px 12px;
-
-    margin-left: 8px;
-}
-
-/* 鼠标移动效果 */
-
-#saveRatingButton:hover,
-#loadRatingButton:hover {
-
-    background-color: #d8ffe6;
-}
-
-/* =========================
-   保存 / 读取评分提示文字
-========================= */
-
-.fadeMessage {
-
-    /* 和按钮保持距离 */
-    margin-left: 10px;
-
-    /* 小字体 */
-    font-size: 13px;
-
-    /* 亮黄色提示文字 */
-    color: #fff27a;
-
-    /* 默认透明 */
-    opacity: 0;
-
-    /* 淡出动画 */
-    transition: opacity 0.5s;
-
-    white-space: nowrap;
-}
-
-/* =========================
-   主页整体布局
-========================= */
-
-.homeLayout {
-
-    display: grid;
-
-    grid-template-columns: 260px 1fr;
-
-    gap: 40px;
-
-    min-height: 80vh;
-
-    text-align: left;
-}
-
-/* =========================
-   主页左侧导航栏
-========================= */
-
-.sideNav {
-
-    background-color: rgba(0, 40, 20, 0.55);
-
-    border: 2px solid rgba(120, 255, 160, 0.5);
-
-    border-radius: 12px;
-
-    padding: 20px;
-}
-
-/* 导航栏标题 */
-
-.sideNav h2 {
-
-    text-align: center;
-
-    margin-bottom: 20px;
-}
-
-/* 每一个导航选项 */
-
-.navItem {
-
-    display: block;
-
-    padding: 12px 15px;
-
-    margin-bottom: 12px;
-
-    border-radius: 8px;
-
-    background-color: rgba(120, 255, 160, 0.15);
-
-    color: white;
-
-    text-decoration: none;
-
-    font-weight: bold;
-}
-
-/* 鼠标移动到可点击选项上 */
-
-.navItem:hover {
-
-    background-color: rgba(120, 255, 160, 0.35);
-}
-
-/* 开发中的选项 */
-
-.disabledNav {
-
-    opacity: 0.45;
-
-    cursor: not-allowed;
-}
-
-/* =========================
-   主页右侧内容区
-========================= */
-
-.homeContent {
-
-    padding: 20px;
-}
-
-/* 主页介绍文字 */
-
-.homeIntro {
-
-    font-size: 18px;
-
-    margin-bottom: 30px;
-}
-
-/* 主页信息卡片 */
 
 .homeCard {
+    background-color: rgba(0, 40, 20, 0.65);
+    border: 1px solid rgba(120, 255, 160, 0.4);
+    border-radius: 16px;
+    padding: 28px;
+}
 
-    background-color: rgba(0, 40, 20, 0.45);
+.homeCard h2 {
+    margin-top: 0;
+}
 
-    border: 1px solid rgba(120, 255, 160, 0.35);
+.homeCard a {
+    display: block;
+    margin: 14px 0;
+    padding: 12px;
+    border-radius: 10px;
+    background-color: rgba(120, 255, 160, 0.12);
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
 
-    border-radius: 12px;
-
-    padding: 20px;
-
-    margin-bottom: 20px;
+.homeCard a:hover {
+    background-color: rgba(120, 255, 160, 0.28);
 }
 
 /* =========================
-   返回主页按钮
+   Back Button
 ========================= */
 
 .backButton {
+    display: inline-block;
 
-    /* 固定在页面左上角 */
-    position: fixed;
-
-    top: 20px;
-
-    left: 20px;
-
-    z-index: 999;
-
-    padding: 10px 16px;
-
-    border-radius: 8px;
-
-    background-color: rgba(120, 255, 160, 0.15);
+    margin: 20px;
 
     color: white;
 
@@ -594,289 +79,318 @@ button:disabled {
     font-weight: bold;
 }
 
-/* 鼠标悬停效果 */
-
-.backButton:hover {
-
-    background-color: rgba(120, 255, 160, 0.35);
-}
 
 /* =========================
-   Stage 1 实时检测页面
+   Test Page
 ========================= */
 
-/* 一场比赛 */
-
-.matchRow {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 8px;
-
-    margin-bottom: 4px;
-}
-
-/* 队伍按钮 */
-
-.teamButton {
-
-    width: 110px;
-
-    height: 36px;
-
-    border: none;
-
-    border-radius: 8px;
-
-    background-color: rgba(
-        120,
-        255,
-        160,
-        0.15
-    );
-
-    color: white;
-
-    font-weight: bold;
-
-    cursor: pointer;
-
-    /* 名字过长显示省略号 */
-
-    white-space: nowrap;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-}
-
-/* 鼠标悬停效果 */
-
-.teamButton:hover {
-
-    background-color: rgba(
-        120,
-        255,
-        160,
-        0.35
-    );
-}
-
-/* VS文字 */
-
-.vsText {
-
-    font-weight: bold;
-}
-
-/* =========================
-   Stage 1 作业检测页面布局
-========================= */
-
-.testLayout {
-
-    display: grid;
-
-    grid-template-columns: 320px 1fr;
-
-    gap: 15px;
-
-    margin-top: 30px;
-
-    align-items: start;
-}
-
-/* 左侧 Pick'Em 面板 */
-
-.pickemPanel {
-
-    background-color: rgba(0, 40, 20, 0.55);
-
-    border: 2px solid rgba(120, 255, 160, 0.5);
-
-    border-radius: 12px;
+.testContainer {
 
     padding: 20px;
-
-    text-align: left;
 }
 
-/* Pick'Em 下拉框 */
+.testContainer h1 {
 
-.pickSelect {
-
-    width: 120px;
-
-    padding: 6px;
-
-    border-radius: 6px;
-}
-
-/* =========================
-   Pick'Em 一行两个选择框
-========================= */
-
-.pickRow {
-
-    display: flex;
-
-    gap: 10px;
+    text-align: center;
 
     margin-bottom: 10px;
 }
 
-/* =========================
-   作业检测页面：右侧对阵区域
-========================= */
+.testContainer .subtitle {
 
-#matchContainer {
+    text-align: center;
 
-    /* 让整个对阵区靠左，而不是居中 */
-    justify-self: start;
-
-    /* 稍微靠近左侧 Pick'Em 面板 */
-    margin-left: 0;
+    margin-bottom: 40px;
 }
 
-/* =========================
-   获胜队伍
-========================= */
-
-.winnerButton {
-
-    background-color: rgba(
-        120,
-        255,
-        160,
-        0.8
-    ) !important;
-
-    color: black;
-}
 
 /* =========================
-   失败队伍
+   Swiss Board
 ========================= */
 
-.loserButton {
-
-    opacity: 0.35;
-}
-
-/* =========================
-   Round 2 分组显示区域
-========================= */
-
-.roundPanel {
-
-    text-align: left;
-}
-
-/* 1-0 和 0-1 横向排列 */
-
-.poolLayout {
+.swissBoard {
 
     display: flex;
 
     gap: 20px;
 
+    justify-content: center;
+
+    align-items: flex-start;
+}
+
+
+/* =========================
+   Round Column
+========================= */
+
+.roundColumn {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 15px;
+
+    justify-content: center;
+}
+
+.roundColumn h2 {
+
+    text-align: center;
+}
+
+
+/* =========================
+   Boxes
+========================= */
+
+.recordBox,
+.qualifiedBox,
+.eliminatedBox {
+
+    width: 220px;
+
+    min-height: 150px;
+
+    border-radius: 12px;
+
+    padding: 10px;
+
+    box-sizing: border-box;
+}
+
+.recordBox {
+
+    background-color: #2a2a2a;
+}
+
+.qualifiedBox {
+
+    background-color: #008000;
+}
+
+.eliminatedBox {
+
+    background-color: #b30000;
+}
+
+
+/* =========================
+   Record Labels
+========================= */
+
+.recordBox h3,
+.qualifiedBox h3,
+.eliminatedBox h3 {
+
+    margin-top: 0;
+}
+
+.swissBoard {
+
+    display: flex;
+
+    gap: 20px;
+
+    justify-content: center;
+
+    align-items: center;
+
+    min-height: 900px;
+}
+
+/* =========================
+   Match Card
+========================= */
+
+.matchCard {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 6px;
+
+    margin-bottom: 8px;
+}
+
+
+/* =========================
+   Team Button
+========================= */
+
+.teamButton {
+
+    width: 130px;
+
+    height: 28px;
+
+    border: none;
+
+    border-radius: 6px;
+
+    background-color: #d9d9d9;
+
+    cursor: pointer;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+.teamButton:hover {
+
+    transform: scale(1.03);
+}
+
+
+/* =========================
+   Winner
+========================= */
+
+.winnerButton {
+
+    background-color: #65d47a;
+
+    color: black;
+}
+
+
+/* =========================
+   Loser
+========================= */
+
+.loserButton {
+
+    background-color: #7a7a7a;
+
+    color: #222;
+}
+
+.teamCard {
+    background-color: rgba(255, 255, 255, 0.18);
+    padding: 8px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* =========================
+   Simulator Page
+========================= */
+
+.simulatorLayout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.ratingRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 10px;
+}
+
+.ratingRow span {
+    font-weight: bold;
+}
+
+.ratingInput {
+    width: 70px;
+    padding: 6px;
+    border-radius: 6px;
+    border: none;
+    text-align: center;
+}
+
+.mainButton {
+    margin-top: 20px;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    background-color: #65d47a;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.mainButton:hover {
+    filter: brightness(1.1);
+}
+
+/* =========================
+   Simulation Results
+========================= */
+
+#resultArea {
+
     margin-top: 20px;
 }
 
-/* 单个分组盒子 */
+.resultRow {
 
-.poolBox {
+    display: flex;
 
-    background-color: rgba(0, 40, 20, 0.55);
+    justify-content: space-between;
 
-    border: 1px solid rgba(120, 255, 160, 0.45);
-
-    border-radius: 10px;
-
-    padding: 15px;
-
-    width: 180px;
-}
-
-/* 分组里的队伍 */
-
-.poolTeam {
-
-    padding: 6px 8px;
+    padding: 8px;
 
     margin-bottom: 6px;
 
     border-radius: 6px;
 
-    background-color: rgba(120, 255, 160, 0.15);
+    background-color: rgba(255,255,255,0.08);
+}
 
+.ratingMatchRow {
+    display: grid;
+    grid-template-columns: 1fr 35px 1fr;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.ratingTeamBox {
+    display: grid;
+    grid-template-columns: 1fr 50px;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+
+.ratingTeamBox span {
+    font-size: 13px;
     font-weight: bold;
-
     white-space: nowrap;
-
     overflow: hidden;
-
     text-overflow: ellipsis;
 }
 
-/* =========================
-   瑞士轮三列布局
-========================= */
-
-.roundsLayout {
-
-    display: flex;
-
-    align-items: flex-start;
-
-    gap: 20px;
+.ratingVs {
+    text-align: center;
+    font-weight: bold;
 }
 
-/* 每一轮的列 */
-
-.roundColumn {
-
-    width: 260px;
-
-    min-height: 500px;
-
-    background-color: rgba(0, 40, 20, 0.35);
-
-    border: 1px solid rgba(120, 255, 160, 0.35);
-
-    border-radius: 12px;
-
-    padding: 15px;
-
+.ratingMatchRow .ratingInput {
+    width: 50px;
+    padding: 6px;
+    border-radius: 6px;
+    border: none;
     text-align: center;
 }
-
-/* 每一轮标题 */
-
-.roundColumn h2 {
-
-    margin-top: 0;
-
-    margin-bottom: 15px;
-}
-
-/* =========================
-   Round 2 内部分组
-========================= */
-
-.roundGroup {
-
-    margin-bottom: 25px;
-}
-
-/* Round 2 分组标题 */
-
-.roundGroup h3 {
-
-    margin-bottom: 12px;
-
-    text-align: center;
-}
-

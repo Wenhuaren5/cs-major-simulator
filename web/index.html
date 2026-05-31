@@ -2,99 +2,43 @@
 <html lang="zh">
 
 <head>
-    <!-- 网页基础设置 -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>科隆Major作业模拟器</title>
-
-    <!-- 连接统一样式文件 -->
-    <link rel="stylesheet" href="css/style.css">
+    <title>CS Major Simulator</title>
+    <link rel="stylesheet" href="./css/style.css">
 </head>
 
 <body>
 
-    <!-- 整个主页布局：左边导航，右边主页内容 -->
-    <div class="homeLayout">
+    <main class="homeContainer">
 
-        <!-- 左侧导航栏 -->
-        <nav class="sideNav">
+        <h1>CS2 Major 瑞士轮模拟器</h1>
 
-            <h2>功能列表</h2>
+        <p class="subtitle">
+            Swiss system simulator and Pick'Em research tool
+        </p>
 
-            <!-- 已完成：跳转到 Stage 1 模拟器 -->
-            <a href="simulator_stage1/simulator_stage1.html" class="navItem">
-                Stage 1 Simulator
-            </a>
+        <div class="homeGrid">
 
-            <!-- 已完成：用于实时计算 Stage 1 作业通过率 -->
-            <a href="test_stage1/test_stage1.html" class="navItem">
+            <section class="homeCard">
+                <h2>Simulator</h2>
 
-                Stage 1 作业实时通过率
+                <a href="./simulator/simulator_stage1/simulator_stage1.html">Stage 1 Simulator</a>
+                <a href="./simulator/simulator_stage2/simulator_stage2.html">Stage 2 Simulator</a>
+                <a href="./simulator/simulator_stage3/simulator_stage3.html">Stage 3 Simulator</a>
+            </section>
 
-            </a>
+            <section class="homeCard">
+                <h2>Test Lab</h2>
 
-            <!-- 开发中：以后用于 Stage 2 模拟 -->
-            <div class="navItem disabledNav">
-                Stage 2 Simulator
-            </div>
+                <a href="./test/test_stage1/test_stage1.html">Stage 1 Test</a>
+                <a href="./test/test_stage2/test_stage2.html">Stage 2 Test</a>
+                <a href="./test/test_stage3/test_stage3.html">Stage 3 Test</a>
+            </section>
 
-            <!-- 开发中：以后继续扩展 -->
-            <div class="navItem disabledNav">
-                Stage 2 作业实时检测
-            </div>
+        </div>
 
-            <div class="navItem disabledNav">
-                Stage 3 Simulator
-            </div>
-
-            <div class="navItem disabledNav">
-                Stage 3 作业实时检测
-            </div>
-
-        </nav>
-
-        <!-- 右侧主页内容 -->
-        <main class="homeContent">
-
-            <h1>科隆Major瑞士轮作业小程序</h1>
-
-            <p class="homeIntro">
-                这是一个用于 CS Major 瑞士轮 Pick'Em 作业分析的小工具。
-            </p>
-
-            <div class="homeCard">
-
-                <h2>当前可用功能</h2>
-
-                <p>
-                    Stage 1 Simulator：输入战队评分，进行 Monte Carlo 模拟，并生成 Pick'Em 推荐。
-                </p>
-
-            </div>
-
-            <div class="homeCard">
-
-                <h2>开发计划</h2>
-
-                <p>
-                    v3.0 将加入作业实时检测功能。用户可以根据现实比赛结果，计算自己的 Pick'Em 通过率。
-                </p>
-
-            </div>
-
-            <div class="homeCard">
-
-                <h2>当前版本</h2>
-
-                <p>
-                    v3.0-dev
-                </p>
-
-            </div>
-
-        </main>
-
-    </div>
+    </main>
 
 </body>
 

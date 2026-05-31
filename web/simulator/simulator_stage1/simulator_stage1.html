@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stage 1 Simulator</title>
+
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+
+<body>
+
+    <a href="../../index.html" class="backButton">
+        ← Back Home
+    </a>
+
+    <main class="testContainer">
+
+        <h1>Stage 1 Simulator</h1>
+
+        <p class="subtitle">
+            Enter ratings and run Swiss Monte Carlo simulation
+        </p>
+
+        <div class="simulatorLayout">
+
+            <section class="homeCard">
+                <h2>Round 1 Matchups</h2>
+
+                <div id="matchupInputArea"></div>
+            </section>
+
+            <section class="homeCard">
+                <h2>Team Ratings</h2>
+
+                <div id="ratingInputArea"></div>
+
+                <button id="runSimulationButton" class="mainButton">
+                    开始模拟
+                </button>
+
+                <div id="recommendationArea"></div>
+
+                <div id="resultArea"></div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+    <script src="../../js/simulation.js"></script>
+    <script src="../../js/montecarlo.js"></script>
+    <script src="../../js/recommendation.js"></script>
+    <script src="./script_simulator_stage1.js"></script>
+
+</body>
+
+</html>
