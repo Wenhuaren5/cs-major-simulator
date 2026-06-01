@@ -25,6 +25,14 @@ const ratingInputArea =
 const runSimulationButton =
     document.getElementById("runSimulationButton");
 
+const saveRatingsButton =
+    document.getElementById("saveRatingsButton");
+
+const loadRatingsButton =
+    document.getElementById("loadRatingsButton");
+
+const statusMessage =
+    document.getElementById("statusMessage");
 
 // =========================
 // 页面初始化
@@ -163,32 +171,86 @@ function getRatingsFromInput() {
 // =========================
 // 点击开始模拟
 // =========================
-runSimulationButton.addEventListener("click", () => {
+runSimulationButton.addEventListener(
+    "click",
+    () => {
 
-    const ratings =
-        getRatingsFromInput();
+        const ratings =
+            getRatingsFromInput();
 
-    const results =
-        runMonteCarlo(
-            firstRoundMatches,
-            ratings,
-            10000
-        );
+        // =========================
+        // 运行 Monte Carlo
+        // 返回统计结果和每一次模拟结果
+        // =========================
+        const monteCarloResult =
+            runMonteCarlo(
+                firstRoundMatches,
+                ratings,
+                10000
+            );
 
-    renderSimulationResults(results);
+        const results =
+            monteCarloResult.stats;
 
-    // =========================
-    // 生成 Pick'Em 推荐
-    // =========================
-    const recommendation =
-        generatePickemRecommendation(
+        const simulationResults =
+            monteCarloResult.simulationResults;
+
+        // =========================
+        // 显示结果区域
+        // =========================
+        document
+            .getElementById(
+                "resultsSection"
+            )
+            .style.display =
+            "block";
+
+        // =========================
+        // 显示模拟结果
+        // =========================
+        renderSimulationResults(
             results
         );
 
-    renderRecommendation(
-        recommendation
-    );
-});
+        // =========================
+        // 自动滚动到结果区域
+        // =========================
+        document
+            .getElementById("resultsSection")
+            .scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+        // =========================
+        // 生成推荐
+        // =========================
+        const recommendation =
+            generatePickemRecommendation(
+                results
+            );
+
+        const bestPickemToggle =
+            document.getElementById("bestPickemToggle");
+
+        renderRecommendation(recommendation);
+
+        if (bestPickemToggle.checked) {
+
+            console.log("开始计算保5最优推荐");
+
+            const bestPickemRecommendation =
+                generateBestPickemRecommendation(
+                    results,
+                    simulationResults
+                );
+
+            renderBestPickemRecommendation(
+                bestPickemRecommendation
+            );
+        }
+    }
+);
 
 // =========================
 // 显示模拟结果
@@ -202,11 +264,37 @@ function renderSimulationResults(results) {
             return results[b].advanced - results[a].advanced;
         });
 
+    // =========================
+    // 表头
+    // =========================
+    resultArea.innerHTML += `
+
+        <div class="resultHeader">
+
+            <span>Team</span>
+            <span>3-0</span>
+            <span>Advance</span>
+            <span>0-3</span>
+
+        </div>
+
+    `;
+
     sortedTeams.forEach(teamName => {
+
+        const threeZeroRate =
+            (
+                results[teamName].threeZero / 10000 * 100
+            ).toFixed(1);
 
         const advanceRate =
             (
                 results[teamName].advanced / 10000 * 100
+            ).toFixed(1);
+
+        const zeroThreeRate =
+            (
+                results[teamName].zeroThree / 10000 * 100
             ).toFixed(1);
 
         resultArea.innerHTML += `
@@ -215,7 +303,11 @@ function renderSimulationResults(results) {
 
                 <span>${teamName}</span>
 
+                <span>${threeZeroRate}%</span>
+
                 <span>${advanceRate}%</span>
+
+                <span>${zeroThreeRate}%</span>
 
             </div>
 
@@ -257,6 +349,119 @@ function renderRecommendation(recommendation) {
             .map(team =>
                 `<div>${team}</div>`
             )
+            .join("")}
+    `;
+}
+
+// =========================
+// 保存评分
+// =========================
+saveRatingsButton.addEventListener("click", () => {
+
+    const ratings =
+        getRatingsFromInput();
+
+    localStorage.setItem(
+        "stage1Ratings",
+        JSON.stringify(ratings)
+    );
+
+    showStatus("✓ 评分已保存");
+});
+
+
+// =========================
+// 载入评分
+// =========================
+loadRatingsButton.addEventListener("click", () => {
+
+    const savedRatings =
+        localStorage.getItem("stage1Ratings");
+
+    if (!savedRatings) {
+        showStatus("没有找到已保存的评分");
+        return;
+    }
+
+    const ratings =
+        JSON.parse(savedRatings);
+
+    document
+        .querySelectorAll(".ratingInput")
+        .forEach(input => {
+
+            const teamName =
+                input.dataset.team;
+
+            if (ratings[teamName] !== undefined) {
+                input.value = ratings[teamName];
+            }
+        });
+
+    showStatus("✓ 评分已载入");
+});
+
+
+// =========================
+// 显示状态提示（淡入淡出）
+// =========================
+function showStatus(message) {
+
+    statusMessage.textContent =
+        message;
+
+    // 淡入
+    statusMessage.style.opacity = "1";
+
+    setTimeout(() => {
+
+        // 淡出
+        statusMessage.style.opacity = "0";
+
+        setTimeout(() => {
+
+            statusMessage.textContent = "";
+
+        }, 500);
+
+    }, 2000);
+}
+
+// =========================
+// 显示保5最优推荐
+// =========================
+function renderBestPickemRecommendation(recommendation) {
+
+    const area =
+        document.getElementById("recommendationArea");
+
+    area.innerHTML += `
+
+        <hr>
+
+        <h2>Best 5-Correct Recommendation</h2>
+
+        <h3>
+            Pass Chance:
+            ${(recommendation.passChance * 100).toFixed(1)}%
+        </h3>
+
+        <h3>Best 3-0</h3>
+
+        ${recommendation.threeZero
+            .map(team => `<div>${team}</div>`)
+            .join("")}
+
+        <h3>Best Advance</h3>
+
+        ${recommendation.advance
+            .map(team => `<div>${team}</div>`)
+            .join("")}
+
+        <h3>Best 0-3</h3>
+
+        ${recommendation.zeroThree
+            .map(team => `<div>${team}</div>`)
             .join("")}
     `;
 }

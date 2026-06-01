@@ -25,26 +25,90 @@
 
         <div class="simulatorLayout">
 
-            <section class="homeCard">
-                <h2>Round 1 Matchups</h2>
+            <div class="simulatorColumn">
 
-                <div id="matchupInputArea"></div>
-            </section>
+                <section class="homeCard">
+                    <h2>Round 1 Matchups</h2>
 
-            <section class="homeCard">
-                <h2>Team Ratings</h2>
+                    <div id="matchupInputArea"></div>
+                </section>
 
-                <div id="ratingInputArea"></div>
+            </div>
 
-                <button id="runSimulationButton" class="mainButton">
-                    开始模拟
-                </button>
+            <div class="simulatorColumn">
 
-                <div id="recommendationArea"></div>
+                <section class="homeCard">
 
-                <div id="resultArea"></div>
+                    <h2>Team Ratings</h2>
 
-            </section>
+                    <div id="ratingInputArea"></div>
+
+                </section>
+
+            </div>
+
+        </div>
+
+        <!-- =========================
+             控制按钮区域
+        ========================= -->
+        <div class="controlPanel">
+
+            <button id="runSimulationButton">
+                开始模拟
+            </button>
+
+            <button id="saveRatingsButton">
+                保存评分
+            </button>
+
+            <button id="loadRatingsButton">
+                载入评分
+            </button>
+
+            <label class="bestPickemLabel">
+
+                <input
+                    type="checkbox"
+                    id="bestPickemToggle"
+                >
+
+                计算保5最优推荐（较慢）
+
+            </label>
+
+            <span id="statusMessage"></span>
+
+        </div>
+
+        <!-- =========================
+             模拟结果区域
+             默认隐藏
+        ========================= -->
+        <div id="resultsSection">
+
+            <hr>
+
+            <div class="resultsLayout">
+
+                <section>
+                    <h2>Simulation Results</h2>
+
+                    <div id="resultArea"></div>
+                </section>
+
+                <section>
+                    <h2>Pick'Em Recommendation</h2>
+
+                    <div id="bestPickemStatus"></div>
+
+                    <div id="recommendationArea"></div>
+                    
+                    </div>
+                    
+                </section>
+
+            </div>
 
         </div>
 

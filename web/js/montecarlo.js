@@ -75,6 +75,14 @@ function runMonteCarlo(firstRoundMatches, ratings, simulationCount = 10000) {
 
     let stats = {};
 
+    // =========================
+    // 保存每一次完整模拟结果
+    //
+    // 后面保5推荐会直接复用
+    // 不需要重新模拟
+    // =========================
+    let simulationResults = [];
+
     const teamNames =
         Object.keys(ratings);
 
@@ -96,6 +104,13 @@ function runMonteCarlo(firstRoundMatches, ratings, simulationCount = 10000) {
                 ratings
             );
 
+        // =========================
+        // 保存本次模拟结果
+        // =========================
+        simulationResults.push(
+            resultTeams
+        );
+
         resultTeams.forEach(team => {
 
             if (team.advanced) {
@@ -116,5 +131,11 @@ function runMonteCarlo(firstRoundMatches, ratings, simulationCount = 10000) {
         });
     }
 
-    return stats;
+    return {
+
+        stats: stats,
+
+        simulationResults:
+            simulationResults
+    };
 }
