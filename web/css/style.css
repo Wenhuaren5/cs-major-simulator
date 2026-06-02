@@ -1,0 +1,611 @@
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    background:
+        linear-gradient(
+            to bottom,
+            #1a7f42 0%,
+            #175a32 45%,
+            #02290f 100%
+        );
+
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+.homeContainer {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 24px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 42px;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #b8d8c0;
+    margin-bottom: 40px;
+}
+
+.homeGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+.homeCard {
+    background-color: rgba(0, 40, 20, 0.65);
+    border: 1px solid rgba(120, 255, 160, 0.4);
+    border-radius: 16px;
+    padding: 28px;
+}
+
+.homeCard h2 {
+    margin-top: 0;
+}
+
+.homeCard a {
+    display: block;
+    margin: 14px 0;
+    padding: 12px;
+    border-radius: 10px;
+    background-color: rgba(120, 255, 160, 0.12);
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.homeCard a:hover {
+    background-color: rgba(120, 255, 160, 0.28);
+}
+
+/* =========================
+   Back Button
+========================= */
+
+.backButton {
+    display: inline-block;
+
+    margin: 20px;
+
+    color: white;
+
+    text-decoration: none;
+
+    font-weight: bold;
+}
+
+
+/* =========================
+   Test Page
+========================= */
+
+.testContainer {
+
+    padding: 20px;
+}
+
+.testContainer h1 {
+
+    text-align: center;
+
+    margin-bottom: 10px;
+}
+
+.testContainer .subtitle {
+
+    text-align: center;
+
+    margin-bottom: 40px;
+}
+
+
+/* =========================
+   Swiss Board
+========================= */
+
+.swissBoard {
+
+    display: flex;
+
+    gap: 20px;
+
+    justify-content: center;
+
+    align-items: flex-start;
+}
+
+
+/* =========================
+   Round Column
+========================= */
+
+.roundColumn {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 15px;
+
+    justify-content: center;
+}
+
+.roundColumn h2 {
+
+    text-align: center;
+}
+
+
+/* =========================
+   Boxes
+========================= */
+
+.recordBox,
+.qualifiedBox,
+.eliminatedBox {
+
+    width: 220px;
+
+    min-height: 150px;
+
+    border-radius: 12px;
+
+    padding: 10px;
+
+    box-sizing: border-box;
+}
+
+.recordBox {
+
+    background-color: #2a2a2a;
+}
+
+.qualifiedBox {
+
+    background-color: #008000;
+}
+
+.eliminatedBox {
+
+    background-color: #b30000;
+}
+
+
+/* =========================
+   Record Labels
+========================= */
+
+.recordBox h3,
+.qualifiedBox h3,
+.eliminatedBox h3 {
+
+    margin-top: 0;
+}
+
+.swissBoard {
+
+    display: flex;
+
+    gap: 20px;
+
+    justify-content: center;
+
+    align-items: center;
+
+    min-height: 900px;
+}
+
+/* =========================
+   Match Card
+========================= */
+
+.matchCard {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 6px;
+
+    margin-bottom: 8px;
+}
+
+
+/* =========================
+   Team Button
+========================= */
+
+.teamButton {
+
+    width: 130px;
+
+    height: 28px;
+
+    border: none;
+
+    border-radius: 6px;
+
+    background-color: #d9d9d9;
+
+    cursor: pointer;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+.teamButton:hover {
+
+    transform: scale(1.03);
+}
+
+
+/* =========================
+   Winner
+========================= */
+
+.winnerButton {
+
+    background-color: #65d47a;
+
+    color: black;
+}
+
+
+/* =========================
+   Loser
+========================= */
+
+.loserButton {
+
+    background-color: #7a7a7a;
+
+    color: #222;
+}
+
+.teamCard {
+    background-color: rgba(255, 255, 255, 0.18);
+    padding: 8px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* =========================
+   Simulator Page
+========================= */
+
+.simulatorLayout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.ratingRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 10px;
+}
+
+.ratingRow span {
+    font-weight: bold;
+}
+
+.ratingInput {
+    width: 70px;
+    padding: 6px;
+    border-radius: 6px;
+    border: none;
+    text-align: center;
+}
+
+.mainButton {
+    margin-top: 20px;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    background-color: #65d47a;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.mainButton:hover {
+    filter: brightness(1.1);
+}
+
+/* =========================
+   Simulation Results
+========================= */
+
+#resultArea {
+
+    margin-top: 20px;
+}
+
+.resultRow {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    padding: 8px;
+
+    margin-bottom: 6px;
+
+    border-radius: 6px;
+
+    background-color: rgba(255,255,255,0.08);
+}
+
+.ratingMatchRow {
+    display: grid;
+    grid-template-columns: 1fr 35px 1fr;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.ratingTeamBox {
+    display: grid;
+    grid-template-columns: 1fr 50px;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+
+.ratingTeamBox span {
+    font-size: 13px;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ratingVs {
+    text-align: center;
+    font-weight: bold;
+}
+
+.ratingMatchRow .ratingInput {
+    width: 50px;
+    padding: 6px;
+    border-radius: 6px;
+    border: none;
+    text-align: center;
+}
+
+.simulatorColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* =========================
+   模拟结果区域
+   默认隐藏
+========================= */
+
+#resultsSection {
+
+    display: none;
+
+    max-width: 1100px;
+
+    margin: 40px auto;
+
+}
+
+
+/* =========================
+   分割线
+========================= */
+
+#resultsSection hr {
+
+    margin-bottom: 30px;
+
+}
+
+
+/* =========================
+   标题
+========================= */
+
+#resultsSection h2 {
+
+    margin-top: 30px;
+
+    margin-bottom: 15px;
+}
+
+.resultsLayout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.resultsLayout section {
+    background-color: rgba(0, 40, 20, 0.65);
+    border: 1px solid rgba(120, 255, 160, 0.4);
+    border-radius: 16px;
+    padding: 24px;
+}
+
+.resultHeader,
+.resultRow {
+
+    display: grid;
+
+    grid-template-columns:
+        2fr
+        1fr
+        1fr
+        1fr;
+
+    gap: 12px;
+
+    align-items: center;
+}
+
+.resultHeader {
+
+    font-weight: bold;
+
+    margin-bottom: 12px;
+
+    color: #90ffb0;
+}
+
+.controlPanel {
+    max-width: 1100px;
+    margin: 24px auto 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 14px;
+}
+
+.controlPanel button {
+    width: 180px;
+    padding: 12px;
+
+    border: none;
+    border-radius: 10px;
+
+    background-color: #65d47a;
+    color: black;
+
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.controlPanel button:hover {
+    filter: brightness(1.1);
+}
+
+#statusMessage {
+
+    min-width: 140px;
+
+    color: #90ffb0;
+
+    font-weight: bold;
+
+    opacity: 0;
+
+    transition: opacity 0.5s ease;
+}
+
+.controlPanel {
+
+    max-width: 1100px;
+
+    margin: 24px auto;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 14px;
+}
+
+.bestPickemLabel {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: white;
+
+    font-weight: bold;
+
+    white-space: nowrap;
+}
+
+.pickRow {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-bottom: 12px;
+
+    font-weight: bold;
+}
+
+.pickemTrackerContainer {
+    display: flex;
+    gap: 24px;
+    margin-top: 30px;
+}
+
+.pickemTrackerContainer > .homeCard {
+    flex: 1;
+}
+
+.pickemGroup {
+    margin-top: 24px;
+}
+
+.pickemSelectGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.pickemSelect {
+    width: 100%;
+    padding: 12px;
+
+    border: none;
+    border-radius: 10px;
+
+    background-color: #e8e8e8;
+    color: black;
+
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.pickemSelect:focus {
+    outline: 2px solid #65d47a;
+}
+
+.warningText {
+    color: #ffd966;
+    font-weight: bold;
+    margin-top: 16px;
+}
+
+.successText {
+    color: #90ffb0;
+    font-weight: bold;
+    margin-top: 16px;
+}
