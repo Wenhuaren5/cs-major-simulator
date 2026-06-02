@@ -439,7 +439,7 @@ function renderBestPickemRecommendation(recommendation) {
 
         <hr>
 
-        <h2>Best 5-Correct Recommendation</h2>
+        <h2>保通过的最佳推荐</h2>
 
         <h3>
             Pass Chance:
@@ -465,3 +465,4 @@ function renderBestPickemRecommendation(recommendation) {
             .join("")}
     `;
 }
+

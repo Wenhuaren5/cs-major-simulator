@@ -262,6 +262,10 @@ function rebuildAndRender() {
             break;
         }
 
+        if (round === 5) {
+            break;
+        }
+
         const nextRoundNumber =
             round + 1;
 
@@ -509,4 +513,356 @@ function renderFinalResults() {
             `;
         }
     });
+}
+
+fillPickemSelects();
+
+function fillPickemSelects() {
+
+    const teamNames =
+        firstRoundMatches.flat();
+
+    const options =
+        `
+        <option value="">Select Team</option>
+        ${teamNames
+            .map(team => `<option value="${team}">${team}</option>`)
+            .join("")}
+        `;
+
+    document
+        .querySelectorAll(".pickemSelect")
+        .forEach(select => {
+            select.innerHTML = options;
+        });
+}
+
+// =========================
+// 防止重复选择队伍
+// =========================
+document
+    .querySelectorAll(".pickemSelect")
+    .forEach(select => {
+
+        select.addEventListener(
+            "change",
+            updatePickemOptions
+        );
+
+    });
+
+function updatePickemOptions() {
+
+    const selects =
+        document.querySelectorAll(
+            ".pickemSelect"
+        );
+
+    // 当前已选队伍
+    const selectedTeams = [];
+
+    selects.forEach(select => {
+
+        if (select.value !== "") {
+
+            selectedTeams.push(
+                select.value
+            );
+
+        }
+
+    });
+
+    // 更新每个下拉框
+    selects.forEach(currentSelect => {
+
+        const currentValue =
+            currentSelect.value;
+
+        Array.from(
+            currentSelect.options
+        ).forEach(option => {
+
+            if (
+                option.value === ""
+            ) {
+                return;
+            }
+
+            if (
+                option.value === currentValue
+            ) {
+
+                option.hidden = false;
+
+                return;
+            }
+
+            option.hidden =
+                selectedTeams.includes(
+                    option.value
+                );
+        });
+
+    });
+}
+
+// =========================
+// 读取用户 Pick'Em
+// =========================
+function getUserPickem() {
+
+    return {
+        threeZero: [
+            document.getElementById("threeZeroPick1").value,
+            document.getElementById("threeZeroPick2").value
+        ].filter(team => team !== ""),
+
+        advance: [
+            document.getElementById("advancePick1").value,
+            document.getElementById("advancePick2").value,
+            document.getElementById("advancePick3").value,
+            document.getElementById("advancePick4").value,
+            document.getElementById("advancePick5").value,
+            document.getElementById("advancePick6").value
+        ].filter(team => team !== ""),
+
+        zeroThree: [
+            document.getElementById("zeroThreePick1").value,
+            document.getElementById("zeroThreePick2").value
+        ].filter(team => team !== "")
+    };
+}
+
+document
+    .getElementById("calculateMyPickemButton")
+    .addEventListener("click", () => {
+
+        const ratingData =
+            getSavedStage1Ratings();
+
+        const ratings =
+            ratingData.ratings;
+
+        const usingDefaultRatings =
+            ratingData.usingDefault;
+
+        console.log(ratings);
+
+        const userPickem =
+            getUserPickem();
+
+        const passChance =
+            calculateUserPassChance(
+                userPickem,
+                1000
+            );
+
+        document.getElementById("myPickemResultArea").innerHTML = `
+
+            <h1>${(passChance * 100).toFixed(1)}%</h1>
+
+            <p>Chance to reach 5 correct picks</p>
+
+            ${
+                    usingDefaultRatings
+                    ? `
+                        <p class="warningText">
+                            没找到保存过的评分数据。
+                            目前所有战队的胜率都是50%
+                            <br>
+                            想要更加准确的结果，
+                            请先去stage1 simulator保存评分。
+                            <br>
+
+                            <br>
+                            No saved ratings found.
+                            Currently using default 50/50 win probabilities.
+                            <br>
+                            For more accurate predictions,
+                            save ratings in Stage 1 Simulator first.
+                        </p>
+                    `
+                    : `
+                        <p class="successText">
+                            已使用你保存过的数据
+                            <br>
+                            Using your saved Stage 1 ratings.
+                        </p>
+                    `
+            }
+
+        `;
+    });
+
+// =========================
+// 复制当前队伍状态
+// 避免模拟时改坏页面上的 teams
+// =========================
+function cloneTeams(currentTeams) {
+
+    return currentTeams.map(team => {
+
+        return {
+            ...team,
+            opponents: [...team.opponents]
+        };
+    });
+}
+
+
+// =========================
+// 从当前状态继续模拟剩余瑞士轮
+// =========================
+function simulateRemainingTournament(currentTeams) {
+
+    const simulatedTeams =
+        cloneTeams(currentTeams);
+
+    for (let round = 1; round <= 5; round++) {
+
+        const nextRound =
+            generateNextRound(simulatedTeams);
+
+        Object.values(nextRound).forEach(matchups => {
+
+            matchups.forEach(match => {
+
+                const teamA =
+                    match.a.name;
+
+                const teamB =
+                    match.b.name;
+
+                let winner;
+                let loser;
+
+                if (Math.random() < 0.5) {
+                    winner = teamA;
+                    loser = teamB;
+                } else {
+                    winner = teamB;
+                    loser = teamA;
+                }
+
+                recordMatchResult(
+                    simulatedTeams,
+                    winner,
+                    loser
+                );
+            });
+        });
+    }
+
+    return simulatedTeams;
+}
+
+
+// =========================
+// 计算用户 Pick'Em 对了几个
+// =========================
+function countUserCorrectPickem(
+    userPickem,
+    finalTeams
+) {
+
+    let correct = 0;
+
+    finalTeams.forEach(team => {
+
+        if (
+            userPickem.threeZero.includes(team.name) &&
+            team.wins === 3 &&
+            team.losses === 0
+        ) {
+            correct++;
+        }
+
+        if (
+            userPickem.advance.includes(team.name) &&
+            team.advanced
+        ) {
+            correct++;
+        }
+
+        if (
+            userPickem.zeroThree.includes(team.name) &&
+            team.wins === 0 &&
+            team.losses === 3
+        ) {
+            correct++;
+        }
+    });
+
+    return correct;
+}
+
+
+// =========================
+// 计算用户通过概率
+// =========================
+function calculateUserPassChance(
+    userPickem,
+    simulationCount = 1000
+) {
+
+    let passCount = 0;
+
+    for (let i = 0; i < simulationCount; i++) {
+
+        const finalTeams =
+            simulateRemainingTournament(
+                teams
+            );
+
+        const correct =
+            countUserCorrectPickem(
+                userPickem,
+                finalTeams
+            );
+
+        if (correct >= 5) {
+            passCount++;
+        }
+    }
+
+    return passCount / simulationCount;
+}
+
+// =========================
+// 读取 Stage 1 Simulator 保存的评分
+//
+// 如果没有保存评分：
+// 自动使用默认 5 分
+// 也就是所有比赛接近 50/50
+// =========================
+function getSavedStage1Ratings() {
+
+    const savedRatings =
+        localStorage.getItem(
+            "stage1Ratings"
+        );
+
+    if (savedRatings) {
+
+        return {
+            ratings: JSON.parse(savedRatings),
+            usingDefault: false
+        };
+    }
+
+    const defaultRatings = {};
+
+    firstRoundMatches
+        .flat()
+        .forEach(team => {
+
+            defaultRatings[team] = 5;
+
+        });
+
+    return {
+        ratings: defaultRatings,
+        usingDefault: true
+    };
 }
