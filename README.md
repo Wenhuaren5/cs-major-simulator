@@ -1,206 +1,238 @@
-CS Major Swiss Stage Simulator
+# CS Major Simulator
 
-一个基于 Monte Carlo Simulation 的 CS Major 瑞士轮 Pick’Em 模拟工具。
+一个基于 Monte Carlo Simulation 的 CS Major Pick'Em 分析工具。
 
-该项目最初的目标，是帮助玩家根据自己对战队实力的主观判断，更合理地完成 Major Pick’Em 作业。随着项目迭代，它逐渐发展成了一个完整的 Swiss Stage 分析工具。
+## 项目简介
 
-⸻
+CS Major Simulator 最初诞生于我对 Major Pick'Em 的一个简单想法：
 
-当前功能（v2.4）
+> 如果我能根据自己对队伍实力的判断来模拟整个瑞士轮，那么我是否能得到比纯凭感觉更合理的 Pick'Em 结果？
 
-瑞士轮模拟
+随着项目不断迭代，它逐渐从一个简单的瑞士轮模拟器发展成了一个完整的 Major Swiss Stage 分析工具。
 
-* 根据用户输入的 Stage 1 对阵自动生成队伍
-* 支持完整 Swiss Stage 推演
-* 支持 BO1 / BO3 胜负模拟
+目前项目已经支持：
 
-Monte Carlo 概率分析
+* 瑞士轮完整模拟
+* Monte Carlo 概率分析
+* Pick'Em 推荐
+* 保5最优推荐
+* Pick'Em 生存率计算
+* 当前赛事状态追踪
 
-* 通过大量随机模拟计算：
-    * 3-0 概率
-    * 晋级概率
-    * 0-3 概率
+---
 
-Pick’Em 推荐系统
+## 当前版本
 
-* 基础推荐：
-    * 自动推荐 3-0、晋级与 0-3 队伍
-* 保5优化推荐：
-    * 基于 Monte Carlo 结果寻找“保5成功率”最高的 Pick’Em 方案
+### v3.3 — Pick'Em Survival Tracker
 
-用户自定义评分系统
+---
 
-* 玩家可以手动输入每支队伍的实力评分
-* 所有模拟结果都基于用户自己的判断
+## Stage 1 Simulator
 
-本地评分保存
+模拟整个 Major Stage 1 瑞士轮。
 
-* 支持保存与读取评分
-* 使用 localStorage 在浏览器本地存储数据
+功能包括：
 
-⸻
+* 自定义 Stage 1 首轮对阵
+* 自定义队伍评分
+* 自动生成后续轮次
+* 支持 BO1 与 BO3 对局
+* Monte Carlo 多次随机模拟
 
-项目目标
+输出内容：
 
-这个项目并不是为了完全复刻 HLTV 或 Valve 官方 Swiss 规则，而是希望提供一个：
+* 3-0 概率
+* 晋级概率
+* 0-3 概率
 
-* 可交互
-* 可调整
-* 面向玩家主观预测
+---
 
-的概率分析工具。
+## Pick'Em Recommendation
 
-因此，用户可以自由调整队伍评分，并根据自己的理解重新模拟比赛结果。
+根据模拟结果自动生成 Pick'Em 推荐。
 
-⸻
+推荐内容：
 
-未来计划（v3.0）
+### Recommended 3-0
 
-v3.0 的核心目标是：
+自动选择最适合作为 3-0 的队伍。
 
-实时 Pick’Em 通过率追踪器（Live Pick’Em Tracker）
+### Recommended Advance
 
-用户可以：
+自动选择最有可能晋级的队伍。
 
-* 输入自己已经提交的 Pick’Em
-* 根据现实比赛结果手动推进 Swiss Stage
-* 实时查看自己“保5成功”的概率
+### Recommended 0-3
 
-计划中的功能包括：
+自动选择最有可能被淘汰的队伍。
 
-* 点击队伍名称即可推进比赛结果
-* 动态生成后续 Swiss 对阵
-* 根据当前赛况重新进行 Monte Carlo 模拟
-* 实时计算 Pick’Em 存活率
+---
 
-未来还可能加入：
+## Best 5-Correct Recommendation
 
-* 更完整的 Swiss 可视化界面
-* 多赛事支持
-* 自定义规则
-* 历史数据分析
-* 更复杂的评分系统
+这是 v3.2 引入的重要功能。
 
-⸻
+与传统推荐不同：
 
-技术栈
+传统推荐追求：
+
+> 哪些队伍最有可能晋级？
+
+而 Best 5-Correct Recommendation 追求：
+
+> 如何最大化获得至少 5 个正确 Pick'Em 的概率？
+
+系统会尝试不同 Pick'Em 组合，并计算：
+
+* Pass Chance（通过概率）
+* 最优 3-0 组合
+* 最优晋级组合
+* 最优 0-3 组合
+
+目标不是追求完美预测，而是提高作业通过率。
+
+---
+
+## Rating System
+
+用户可以为每支队伍设置自己的实力评分。
+
+评分会影响：
+
+* 每场比赛胜率
+* Monte Carlo 模拟结果
+* 推荐系统结果
+
+支持：
+
+* 保存评分
+* 加载评分
+* 跨页面共享评分
+
+评分保存在浏览器本地。
+
+---
+
+## Stage 1 Test Lab
+
+用于赛事进行中的分析。
+
+当比赛已经进行到一半时：
+
+传统模拟器无法反映当前真实情况。
+
+Test Lab 可以：
+
+* 输入当前比赛结果
+* 输入当前队伍状态
+* 从当前局面继续模拟剩余赛事
+
+帮助用户分析：
+
+* 哪些队伍最可能晋级
+* 哪些队伍最可能淘汰
+* 当前局势变化对 Pick'Em 的影响
+
+---
+
+## Pick'Em Survival Tracker
+
+v3.3 新增功能。
+
+用户可以输入：
+
+### 3-0 Picks
+
+自己选择的 3-0 队伍。
+
+### Advance Picks
+
+自己选择的晋级队伍。
+
+### 0-3 Picks
+
+自己选择的 0-3 队伍。
+
+系统会结合：
+
+* 当前赛事状态
+* Monte Carlo 模拟
+* 用户评分
+
+计算：
+
+### Pass Chance
+
+达到至少 5 个正确 Pick'Em 的概率。
+
+如果没有保存评分：
+
+系统将自动使用默认 50/50 胜率继续模拟，并给予提示。
+
+---
+
+## 技术实现
+
+前端：
 
 * HTML
 * CSS
 * JavaScript
 
-⸻
+算法：
 
-项目状态
+* Swiss Stage Pairing
+* Monte Carlo Simulation
+* Probability Analysis
 
-当前版本：v2.4
+数据存储：
 
-v2 系列已基本完成。
-v3.0 将重点开发实时赛事追踪系统。
+* LocalStorage
 
+部署：
 
+* GitHub Pages
 
-CS Major Swiss Stage Simulator
+---
 
-A web-based CS Major Swiss Stage Pick’Em simulator powered by Monte Carlo simulation.
+## 未来计划
 
-The project originally started as a simple tool to help players make better Pick’Em predictions based on their own team ratings. Over time, it gradually evolved into a more complete Swiss Stage probability analysis tool.
+### v3.4
 
-⸻
+* Stage 2 Test Lab
+* Stage 2 Survival Tracker
+* 更完善的赛事状态管理
 
-Current Features (v2.4)
+### v3.5
 
-Swiss Stage Simulation
+* Stage 3 支持
+* 自动生成完整 Pick'Em 页面
 
-* Automatically generates teams from Stage 1 matchups
-* Full Swiss Stage progression simulation
-* Supports BO1 / BO3 match simulation
+### v4.0
 
-Monte Carlo Probability Analysis
+* Pick'Em Dashboard
+* 历史模拟记录
+* 用户配置导入导出
+* 更快的 Monte Carlo 引擎
+* 移动端界面优化
 
-Calculates:
+---
 
-* 3-0 probability
-* Qualification probability
-* 0-3 probability
+## 项目目标
 
-through large-scale random simulations.
+这个项目并不是为了预测未来。
 
-Pick’Em Recommendation System
+它更像是一个实验：
 
-* Basic recommendation mode:
-    * Automatically suggests 3-0, advancing, and 0-3 picks
-* Optimized “5 correct picks” recommendation:
-    * Searches for the Pick’Em combination with the highest survival probability
+> 如果把玩家对队伍的主观判断转化为概率模型，我们是否能做出更合理的 Pick'Em 决策？
 
-Custom Team Rating System
+希望它能帮助更多玩家以数据分析的方式参与 Major Pick'Em，而不仅仅依赖直觉。
 
-* Users can manually assign ratings to every team
-* All simulations are based on the user’s own assumptions
+---
 
-Local Rating Save System
+作者：
 
-* Supports saving and loading ratings
-* Uses browser localStorage for persistent data storage
+Wenhuaren5
 
-⸻
+项目地址：
 
-Project Goal
-
-This project is not intended to perfectly replicate HLTV or official Valve Swiss rules.
-
-Instead, the goal is to create a:
-
-* customizable
-* interactive
-* player-oriented
-
-probability analysis tool for Pick’Em predictions.
-
-Users are encouraged to freely adjust team ratings and simulate tournaments based on their own understanding of the teams.
-
-⸻
-
-Future Plans (v3.0)
-
-The main goal of v3.0 is:
-
-Live Pick’Em Survival Tracker
-
-Users will be able to:
-
-* input their submitted Pick’Em picks
-* manually advance real match results
-* track their current probability of getting 5 correct picks
-
-Planned features include:
-
-* clickable team buttons for match progression
-* dynamic Swiss pairing generation
-* live Monte Carlo re-simulation
-* real-time Pick’Em survival probability tracking
-
-Possible future additions:
-
-* improved Swiss visualization UI
-* multi-event support
-* customizable Swiss rules
-* historical data analysis
-* more advanced rating systems
-
-⸻
-
-Tech Stack
-
-* HTML
-* CSS
-* JavaScript
-
-⸻
-
-Project Status
-
-Current version: v2.4
-
-The v2 series is considered mostly complete.
-Development focus is now shifting toward the v3.0 live tracking system.
+https://github.com/Wenhuaren5/cs-major-simulator
