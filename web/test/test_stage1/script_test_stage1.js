@@ -780,7 +780,8 @@ function countUserCorrectPickem(
 
         if (
             userPickem.advance.includes(team.name) &&
-            team.advanced
+            team.advanced &&
+            team.losses > 0
         ) {
             correct++;
         }
