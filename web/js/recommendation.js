@@ -17,19 +17,24 @@ function getBest30Picks(results, count = 2) {
         .slice(0, count);
 }
 
-
 // =========================
 // 推荐晋级队伍
 // =========================
-function getBestAdvancePicks(results, count = 6) {
+function getBestAdvancePicks(
+    results,
+    count = 6,
+    excludedTeams = []
+) {
 
     return Object.keys(results)
+        .filter(team =>
+            !excludedTeams.includes(team)
+        )
         .sort((a, b) => {
             return results[b].advanced - results[a].advanced;
         })
         .slice(0, count);
 }
-
 
 // =========================
 // 推荐 0-3
@@ -49,38 +54,23 @@ function getBest03Picks(results, count = 2) {
 // =========================
 function generatePickemRecommendation(results) {
 
+    const threeZero =
+        getBest30Picks(results);
+
+    const advance =
+        getBestAdvancePicks(
+            results,
+            6,
+            threeZero
+        );
+
+    const zeroThree =
+        getBest03Picks(results);
+
     return {
-        threeZero: getBest30Picks(results),
-        advance: getBestAdvancePicks(results),
-        zeroThree: getBest03Picks(results)
-    };
-}
-
-// =========================
-// 保5推荐（测试版）
-// =========================
-function generateBestPickemRecommendation() {
-
-    return {
-
-        threeZero: [
-            "B8",
-            "BIG"
-        ],
-
-        advance: [
-            "MIBR",
-            "HEROIC",
-            "GamerLegion",
-            "TYLOO",
-            "BetBoom",
-            "Liquid"
-        ],
-
-        zeroThree: [
-            "Thunder dOWNUNDER",
-            "FlyQuest"
-        ]
+        threeZero,
+        advance,
+        zeroThree
     };
 }
 
@@ -231,12 +221,6 @@ function generateBestPickemRecommendation(
             2
         );
 
-    const advanceCombinations =
-        getCombinations(
-            advanceCandidates,
-            6
-        );
-
     const zeroThreeCombinations =
         getCombinations(
             zeroThreeCandidates,
@@ -247,6 +231,17 @@ function generateBestPickemRecommendation(
     let bestPassChance = -1;
 
     threeZeroCombinations.forEach(threeZero => {
+
+        const filteredAdvanceCandidates =
+            advanceCandidates.filter(team =>
+                !threeZero.includes(team)
+            );
+
+        const advanceCombinations =
+            getCombinations(
+                filteredAdvanceCandidates,
+                6
+            );
 
         advanceCombinations.forEach(advance => {
 
