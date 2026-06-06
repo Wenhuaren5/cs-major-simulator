@@ -696,6 +696,134 @@ document
     });
 
 // =========================
+// 保存 / 载入作业按钮
+// =========================
+const savePickemButton =
+    document.getElementById(
+        "savePickemButton"
+    );
+
+const loadPickemButton =
+    document.getElementById(
+        "loadPickemButton"
+    );
+
+const statusMessage =
+    document.getElementById(
+        "statusMessage"
+    );
+
+
+// =========================
+// 显示状态提示
+// =========================
+function showStatus(message) {
+
+    statusMessage.textContent =
+        message;
+
+    statusMessage.style.opacity = 1;
+
+    setTimeout(() => {
+
+        statusMessage.style.opacity = 0;
+
+    }, 2000);
+}
+
+
+// =========================
+// 保存作业
+// =========================
+savePickemButton
+    .addEventListener("click", () => {
+
+        const userPickem =
+            getUserPickem();
+
+        localStorage.setItem(
+            "stage1UserPickem",
+            JSON.stringify(userPickem)
+        );
+
+        showStatus(
+            "✓ 作业已保存"
+        );
+
+    });
+
+// =========================
+// 载入作业
+// =========================
+loadPickemButton
+    .addEventListener("click", () => {
+
+        const savedPickem =
+            localStorage.getItem(
+                "stage1UserPickem"
+            );
+
+        if (!savedPickem) {
+
+            showStatus(
+                "没有找到已保存的作业"
+            );
+
+            return;
+        }
+
+        const userPickem =
+            JSON.parse(savedPickem);
+
+        loadUserPickem(
+            userPickem
+        );
+
+        updatePickemOptions();
+
+        showStatus(
+            "✓ 作业已载入"
+        );
+
+    });
+
+// =========================
+// 把保存的 Pick'Em 重新填回下拉框
+// =========================
+function loadUserPickem(userPickem) {
+
+    document.getElementById("threeZeroPick1").value =
+        userPickem.threeZero[0] || "";
+
+    document.getElementById("threeZeroPick2").value =
+        userPickem.threeZero[1] || "";
+
+    document.getElementById("advancePick1").value =
+        userPickem.advance[0] || "";
+
+    document.getElementById("advancePick2").value =
+        userPickem.advance[1] || "";
+
+    document.getElementById("advancePick3").value =
+        userPickem.advance[2] || "";
+
+    document.getElementById("advancePick4").value =
+        userPickem.advance[3] || "";
+
+    document.getElementById("advancePick5").value =
+        userPickem.advance[4] || "";
+
+    document.getElementById("advancePick6").value =
+        userPickem.advance[5] || "";
+
+    document.getElementById("zeroThreePick1").value =
+        userPickem.zeroThree[0] || "";
+
+    document.getElementById("zeroThreePick2").value =
+        userPickem.zeroThree[1] || "";
+}
+
+// =========================
 // 复制当前队伍状态
 // 避免模拟时改坏页面上的 teams
 // =========================

@@ -519,21 +519,6 @@ h1 {
     transition: opacity 0.5s ease;
 }
 
-.controlPanel {
-
-    max-width: 1100px;
-
-    margin: 24px auto;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 14px;
-}
-
 .bestPickemLabel {
 
     display: flex;
