@@ -6,7 +6,7 @@ const firstRoundMatches = [
     ["Team Spirit", "BetBoom"],
     ["Astralis", "GamerLegion"],
     ["G2", "M80"],
-    ["Legacy", "mibr"]
+    ["Legacy", "mibr"],
     ["paiN", "Tyloo"],
     ["Monte", "Big"],
     ["9z", "Flyquest"],
