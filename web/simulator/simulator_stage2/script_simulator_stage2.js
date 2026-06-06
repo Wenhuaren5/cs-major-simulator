@@ -2,14 +2,14 @@
 // Stage 2 第一轮固定对阵
 // =========================
 const firstRoundMatches = [
-    ["Astralis", "GamerLegion"],
-    ["9z", "Flyquest"],
     ["FUT", "B8"],
-    ["paiN", "Tyloo"],
-    ["G2", "M80"],
-    ["Monte", "Big"],
     ["Team Spirit", "BetBoom"],
+    ["Astralis", "GamerLegion"],
+    ["G2", "M80"],
     ["Legacy", "mibr"]
+    ["paiN", "Tyloo"],
+    ["Monte", "Big"],
+    ["9z", "Flyquest"],
 ];
 
 
