@@ -639,7 +639,7 @@ document
     .addEventListener("click", () => {
 
         const ratingData =
-            getSavedStage1Ratings();
+            getSavedStage3Ratings();
 
         const ratings =
             ratingData.ratings;
