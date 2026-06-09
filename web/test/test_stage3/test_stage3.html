@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K2P338QDGZ"></script>
+
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-K2P338QDGZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stage 3 Test</title>
+
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+
+<body>
+
+    <a href="../../index.html" class="backButton">
+        ← 返回主页
+    </a>
+
+    <main class="testContainer">
+
+        <h1>Stage 3 Test Lab</h1>
+
+        <p class="subtitle">
+            Click winners to simulate from current state
+        </p>
+
+        <!-- =========================
+             Scenario 选择
+        ========================= -->
+        <div class="controlPanel">
+            <label class="scenarioLabel">
+                <span>Scenario:</span>
+                <select id="scenarioSelect">
+                    <option value="A">A — BIG 晋级 (vit vs spirit, navi vs fut, furia vs big)</option>
+                    <option value="B">B — B8 晋级 (vit vs fut, navi vs spirit, furia vs b8)</option>
+                </select>
+            </label>
+        </div>
+
+        <!-- =========================
+             Round 1: 0-0
+        ========================= -->
+        <div class="testRow">
+            <div class="testBox" id="zeroZero">
+                <h3>0-0</h3>
+            </div>
+        </div>
+
+        <!-- =========================
+             Round 2: 1-0 / 0-1
+        ========================= -->
+        <div class="testRow">
+            <div class="testBox" id="oneZero">
+                <h3>1-0</h3>
+            </div>
+            <div class="testBox" id="zeroOne">
+                <h3>0-1</h3>
+            </div>
+        </div>
+
+        <!-- =========================
+             Round 3: 2-0 / 1-1 / 0-2
+        ========================= -->
+        <div class="testRow">
+            <div class="testBox" id="twoZero">
+                <h3>2-0</h3>
+            </div>
+            <div class="testBox" id="oneOne">
+                <h3>1-1</h3>
+            </div>
+            <div class="testBox" id="zeroTwo">
+                <h3>0-2</h3>
+            </div>
+        </div>
+
+        <!-- =========================
+             Round 4: 3-0 / 2-1 / 1-2 / 0-3
+        ========================= -->
+        <div class="testRow">
+            <div class="testBox" id="threeZero">
+                <h3>3-0</h3>
+            </div>
+            <div class="testBox" id="twoOne">
+                <h3>2-1</h3>
+            </div>
+            <div class="testBox" id="oneTwo">
+                <h3>1-2</h3>
+            </div>
+            <div class="testBox" id="zeroThree">
+                <h3>0-3</h3>
+            </div>
+        </div>
+
+        <!-- =========================
+             Round 5: 2-2
+        ========================= -->
+        <div class="testRow">
+            <div class="testBox" id="twoTwo">
+                <h3>2-2</h3>
+            </div>
+        </div>
+
+        <!-- =========================
+             Final Results
+        ========================= -->
+        <div class="testRow">
+            <div class="testBox" id="advancedFinal">
+                <h3>晋级</h3>
+            </div>
+            <div class="testBox" id="eliminatedFinal">
+                <h3>淘汰</h3>
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- =========================
+             Pick'Em Survival Calculator
+        ========================= -->
+        <section>
+
+            <h2>Pick'Em Survival Calculator</h2>
+
+            <p class="subtitle">
+                Enter your Pick'Em and calculate pass probability from current state
+            </p>
+
+            <div class="survivalGrid">
+
+                <div>
+                    <h3>3-0 Picks</h3>
+
+                    <select class="pickemSelect" id="threeZeroPick1">
+                    </select>
+
+                    <select class="pickemSelect" id="threeZeroPick2">
+                    </select>
+                </div>
+
+                <div>
+                    <h3>Advance Picks</h3>
+
+                    <select class="pickemSelect" id="advancePick1">
+                    </select>
+
+                    <select class="pickemSelect" id="advancePick2">
+                    </select>
+
+                    <select class="pickemSelect" id="advancePick3">
+                    </select>
+
+                    <select class="pickemSelect" id="advancePick4">
+                    </select>
+
+                    <select class="pickemSelect" id="advancePick5">
+                    </select>
+
+                    <select class="pickemSelect" id="advancePick6">
+                    </select>
+                </div>
+
+                <div>
+                    <h3>0-3 Picks</h3>
+
+                    <select class="pickemSelect" id="zeroThreePick1">
+                    </select>
+
+                    <select class="pickemSelect" id="zeroThreePick2">
+                    </select>
+                </div>
+
+            </div>
+
+            <button id="calculateMyPickemButton" class="calculateButton">
+                Calculate Pass Chance
+            </button>
+
+            <div id="myPickemResultArea"></div>
+
+        </section>
+
+    </main>
+
+    <script src="../../js/simulation.js"></script>
+    <script src="../../js/montecarlo.js"></script>
+    <script src="../../js/recommendation.js"></script>
+    <script src="./script_test_stage3.js"></script>
+
+</body>
+
+</html>

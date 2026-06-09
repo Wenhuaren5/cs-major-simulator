@@ -1,13 +1,22 @@
 // =========================
 // 根据 rating 随机决定一场比赛胜者
+//
+// 使用 Logistic / Sigmoid 模型：
+// P(A赢) = 1 / (1 + e^{-k * (ratingA - ratingB)})
+//
+// k = 1:
+//   rating 差 1 分 ≈ 73%
+//   rating 差 2 分 ≈ 88%
+//   rating 差 3 分 ≈ 95%
+//   rating 相等     = 50%
 // =========================
 function simulateMatch(teamA, teamB) {
 
-    const totalRating =
-        teamA.rating + teamB.rating;
+    const k = 1;
+    const diff = teamA.rating - teamB.rating;
 
     const teamAWinRate =
-        teamA.rating / totalRating;
+        1 / (1 + Math.exp(-k * diff));
 
     if (Math.random() < teamAWinRate) {
         return {

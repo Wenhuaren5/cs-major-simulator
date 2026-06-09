@@ -655,6 +655,7 @@ document
         const passChance =
             calculateUserPassChance(
                 userPickem,
+                ratings,
                 1000
             );
 
@@ -713,11 +714,16 @@ function cloneTeams(currentTeams) {
 
 // =========================
 // 从当前状态继续模拟剩余瑞士轮
+//
+// 使用 Logistic 模型计算胜率：
+// P(A赢) = 1 / (1 + e^{-k * (ratingA - ratingB)})
 // =========================
-function simulateRemainingTournament(currentTeams) {
+function simulateRemainingTournament(currentTeams, ratings) {
 
     const simulatedTeams =
         cloneTeams(currentTeams);
+
+    const k = 1;
 
     for (let round = 1; round <= 5; round++) {
 
@@ -734,10 +740,22 @@ function simulateRemainingTournament(currentTeams) {
                 const teamB =
                     match.b.name;
 
+                const ratingA =
+                    ratings[teamA] || 5;
+
+                const ratingB =
+                    ratings[teamB] || 5;
+
+                const diff =
+                    ratingA - ratingB;
+
+                const teamAWinRate =
+                    1 / (1 + Math.exp(-k * diff));
+
                 let winner;
                 let loser;
 
-                if (Math.random() < 0.5) {
+                if (Math.random() < teamAWinRate) {
                     winner = teamA;
                     loser = teamB;
                 } else {
@@ -804,6 +822,7 @@ function countUserCorrectPickem(
 // =========================
 function calculateUserPassChance(
     userPickem,
+    ratings,
     simulationCount = 1000
 ) {
 
@@ -813,7 +832,8 @@ function calculateUserPassChance(
 
         const finalTeams =
             simulateRemainingTournament(
-                teams
+                teams,
+                ratings
             );
 
         const correct =
