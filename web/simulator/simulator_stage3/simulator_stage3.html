@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K2P338QDGZ"></script>
+    
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-K2P338QDGZ');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stage 3 Simulator</title>
+
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+
+<body>
+
+    <a href="../../index.html" class="backButton">
+        ← 返回主页
+    </a>
+
+    <main class="testContainer">
+
+        <h1>Stage 3 模拟器</h1>
+
+        <p class="subtitle">
+            Enter ratings and run Swiss Monte Carlo simulation
+        </p>
+
+        <div class="simulatorLayout">
+
+            <div class="simulatorColumn">
+
+                <section class="homeCard">
+                    <h2>Round 1 Matchups</h2>
+
+                    <div id="matchupInputArea"></div>
+                </section>
+
+            </div>
+
+            <div class="simulatorColumn">
+
+                <section class="homeCard">
+
+                    <h2>Team Ratings</h2>
+
+                    <div id="ratingInputArea"></div>
+
+                </section>
+
+            </div>
+
+        </div>
+
+        <!-- =========================
+             控制按钮区域
+        ========================= -->
+        <div class="controlPanel">
+
+            <button id="runSimulationButton">
+                开始模拟
+            </button>
+
+            <button id="saveRatingsButton">
+                保存评分
+            </button>
+
+            <button id="loadRatingsButton">
+                载入评分
+            </button>
+
+            <label class="bestPickemLabel">
+
+                <input
+                    type="checkbox"
+                    id="bestPickemToggle"
+                >
+
+                计算保5最优推荐（较慢）
+
+            </label>
+
+            <span id="statusMessage"></span>
+
+        </div>
+
+        <!-- =========================
+             模拟结果区域
+             默认隐藏
+        ========================= -->
+        <div id="resultsSection">
+
+            <hr>
+
+            <div class="resultsLayout">
+
+                <section>
+                    <h2>Simulation Results</h2>
+
+                    <div id="resultArea"></div>
+                </section>
+
+                <section>
+                    <h2>Pick'Em Recommendation</h2>
+
+                    <div id="bestPickemStatus"></div>
+
+                    <div id="recommendationArea"></div>
+                    
+                    </div>
+                    
+                </section>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <script src="../../js/simulation.js"></script>
+    <script src="../../js/montecarlo.js"></script>
+    <script src="../../js/recommendation.js"></script>
+    <script src="./script_simulator_stage3.js"></script>
+
+</body>
+
+</html>
