@@ -125,12 +125,30 @@ function getBuchholzScore(team, teams) {
             getTeamByName(teams, opponentName);
 
         if (opponent) {
-            score += opponent.wins;
+            score += opponent.wins - opponent.losses;
         }
     });
 
     return score;
 }
+
+const sixTeamPairingPriority = [
+    [[1, 6], [2, 5], [3, 4]],
+    [[1, 6], [2, 4], [3, 5]],
+    [[1, 5], [2, 6], [3, 4]],
+    [[1, 5], [2, 4], [3, 6]],
+    [[1, 4], [2, 6], [3, 5]],
+    [[1, 4], [2, 5], [3, 6]],
+    [[1, 6], [2, 3], [4, 5]],
+    [[1, 5], [2, 3], [4, 6]],
+    [[1, 3], [2, 6], [4, 5]],
+    [[1, 3], [2, 5], [4, 6]],
+    [[1, 4], [2, 3], [5, 6]],
+    [[1, 3], [2, 4], [5, 6]],
+    [[1, 2], [3, 6], [4, 5]],
+    [[1, 2], [3, 5], [4, 6]],
+    [[1, 2], [3, 4], [5, 6]]
+];
 
 
 // =========================
@@ -157,6 +175,31 @@ function sortGroupForSwiss(group, teams) {
     });
 }
 
+function createSixTeamPairings(sortedTeams) {
+
+    for (const option of sixTeamPairingPriority) {
+
+        const pairings =
+            option.map(pair => {
+
+                return {
+                    a: sortedTeams[pair[0] - 1],
+                    b: sortedTeams[pair[1] - 1]
+                };
+            });
+
+        const hasRematch =
+            pairings.some(match => {
+                return playedBefore(match.a, match.b);
+            });
+
+        if (!hasRematch) {
+            return pairings;
+        }
+    }
+
+    return null;
+}
 
 // =========================
 // 组内配对
@@ -179,6 +222,34 @@ function createSwissPairings(group, teams) {
     const sorted =
         sortGroupForSwiss(group, teams);
 
+    if (sorted.length === 6) {
+
+        console.log("=== Sorted Group ===");
+
+        console.table(
+            sorted.map(team => ({
+            name: team.name,
+            seed: team.seed,
+            buchholz: getBuchholzScore(team, teams),
+            opponents: team.opponents.join(", ")
+            }))
+        );
+    }
+
+    // =========================
+    // 6队组特殊规则：
+    // 按固定优先级表尝试配对
+    // =========================
+    if (sorted.length === 6) {
+
+        const sixTeamResult =
+            createSixTeamPairings(sorted);
+
+        if (sixTeamResult) {
+            return sixTeamResult;
+        }
+    }
+
     const result =
         findPairingsWithoutRematch(
             sorted,
@@ -194,11 +265,6 @@ function createSwissPairings(group, teams) {
         sorted.map(team => team.name)
     );
 
-    // =========================
-    // fallback：
-    // 如果真的不存在完全避免重复交手的方案，
-    // 才使用原来的贪心方法
-    // =========================
     return createFallbackPairings(
         sorted
     );
