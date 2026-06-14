@@ -1,6 +1,13 @@
 // =========================
-// 根据 rating 随机决定一场比赛胜者
+// Monte Carlo Simulator
+//
+// 这个文件负责“跑很多次可能的比赛结果”。
+// 它会复用 simulation.js 里的瑞士轮规则，然后统计每支队伍晋级、淘汰、3-0、0-3 的概率。
 // =========================
+
+
+// 根据两队 rating 随机决定一场比赛胜者。
+// rating 越高，抽到胜利的概率越高；rating 一样就是 50/50。
 function simulateMatch(teamA, teamB) {
 
     const totalRating =
@@ -23,9 +30,8 @@ function simulateMatch(teamA, teamB) {
 }
 
 
-// =========================
-// 模拟一次完整 Stage 1
-// =========================
+// 模拟一次完整 Stage。
+// 从第一轮开始打，最多生成到第五轮，最终返回所有队伍的胜负状态。
 function simulateOneTournament(firstRoundMatches, ratings) {
 
     let teams =
@@ -68,19 +74,11 @@ function simulateOneTournament(firstRoundMatches, ratings) {
 }
 
 
-// =========================
-// Monte Carlo 多次模拟
-// =========================
+// Monte Carlo 多次模拟入口。
+// stats 用来展示概率表，simulationResults 会交给 Pick'Em 推荐系统继续复用。
 function runMonteCarlo(firstRoundMatches, ratings, simulationCount = 10000) {
 
     let stats = {};
-
-    // =========================
-    // 保存每一次完整模拟结果
-    //
-    // 后面保5推荐会直接复用
-    // 不需要重新模拟
-    // =========================
     let simulationResults = [];
 
     const teamNames =
@@ -104,9 +102,7 @@ function runMonteCarlo(firstRoundMatches, ratings, simulationCount = 10000) {
                 ratings
             );
 
-        // =========================
-        // 保存本次模拟结果
-        // =========================
+        // 保存这一次完整模拟，后面算“最佳 Pick'Em”时不用重新跑比赛。
         simulationResults.push(
             resultTeams
         );
@@ -132,10 +128,7 @@ function runMonteCarlo(firstRoundMatches, ratings, simulationCount = 10000) {
     }
 
     return {
-
         stats: stats,
-
-        simulationResults:
-            simulationResults
+        simulationResults: simulationResults
     };
 }

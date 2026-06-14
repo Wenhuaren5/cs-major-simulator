@@ -1,16 +1,8 @@
 // =========================
 // Stage 3 第一轮固定对阵
 // =========================
-const firstRoundMatches = [
-    ["Vitality", "FUT"],
-    ["NAVI", "Team Spirit"],
-    ["Falcons", "G2"],
-    ["The Mongolz", "BetBoom"],
-    ["PARIVISION", "9z"],
-    ["Aurora", "Monte"],
-    ["FURIA", "B8"],
-    ["MOUZ", "Legacy"]
-];
+const firstRoundMatches =
+    majorManager.getFirstRoundMatchesForStage("stage3");
 
 
 // =========================
@@ -464,6 +456,7 @@ function clearFutureRounds() {
     }
 }
 
+// 显示 3-0、晋级、0-3、淘汰这四类最终结果。
 function renderFinalResults() {
 
     const threeZeroBox =
@@ -517,6 +510,7 @@ function renderFinalResults() {
 
 fillPickemSelects();
 
+// 把当前 stage 的所有队伍填进 Pick'Em 下拉框。
 function fillPickemSelects() {
 
     const teamNames =
@@ -638,8 +632,9 @@ document
     .getElementById("calculateMyPickemButton")
     .addEventListener("click", () => {
 
+        // 先读取 simulator 里保存过的 rating；没有保存时用默认 50/50。
         const ratingData =
-            getSavedStage1Ratings();
+            getSavedStage3Ratings();
 
         const ratings =
             ratingData.ratings;
@@ -652,6 +647,7 @@ document
         const userPickem =
             getUserPickem();
 
+        // 从当前比赛状态继续模拟，估算用户作业保 5 的概率。
         const passChance =
             calculateUserPassChance(
                 userPickem,
@@ -742,7 +738,7 @@ savePickemButton
             getUserPickem();
 
         localStorage.setItem(
-            "stage3UserPickem",
+            majorManager.getMajorScopedKey("stage3UserPickem"),
             JSON.stringify(userPickem)
         );
 
@@ -760,7 +756,7 @@ loadPickemButton
 
         const savedPickem =
             localStorage.getItem(
-                "stage3UserPickem"
+                majorManager.getMajorScopedKey("stage3UserPickem")
             );
 
         if (!savedPickem) {
@@ -969,7 +965,7 @@ function getSavedStage3Ratings() {
 
     const savedRatings =
         localStorage.getItem(
-            "stage3Ratings"
+            majorManager.getMajorScopedKey("stage3Ratings")
         );
 
     if (savedRatings) {
