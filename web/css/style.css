@@ -1,7 +1,14 @@
+/* 基础样式：如果 JS 没加载成功，会先退回到这套黑白样式。 */
 body {
     margin: 0;
     min-height: 100vh;
+    background: white;
+    color: black;
+    font-family: Arial, sans-serif;
+}
 
+/* Cologne 主题：现在是网站默认主题，也可以通过 2026 Cologne 按钮重新选择。 */
+body.theme-2026-cologne {
     background:
         linear-gradient(
             to bottom,
@@ -11,7 +18,25 @@ body {
         );
 
     color: white;
-    font-family: Arial, sans-serif;
+}
+
+/* Singapore 主题：先保留白底占位，等正式配色和数据确定后再扩展。 */
+body.theme-2026-singapore {
+    background: white;
+    color: black;
+}
+
+/* Budapest 主题：暗红到紫黑的渐变，匹配用户提供的 Major 参考图。 */
+body.theme-2025-budapest {
+    background:
+        linear-gradient(
+            to bottom,
+            #4a1e2a 0%,
+            #34263a 45%,
+            #17111f 100%
+        );
+
+    color: white;
 }
 
 .homeContainer {
@@ -21,13 +46,54 @@ body {
     text-align: center;
 }
 
+/* 首页左上角 Major 切换按钮区域。 */
+.majorNav {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+.majorButton {
+    padding: 12px 22px;
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color: white;
+    color: black;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.majorButton:hover {
+    filter: brightness(1.1);
+}
+
+/* Major 按钮保持自己的代表色，不跟着当前页面主题一起变色。 */
+.majorButton[data-major-id="2025_budapest"] {
+    border: none;
+    background-color: #76548f;
+    color: white;
+}
+
+.majorButton[data-major-id="2026_cologne"] {
+    border: none;
+    background-color: #65d47a;
+    color: black;
+}
+
+.majorButton[data-major-id="2026_singapore"] {
+    border: 1px solid black;
+    background-color: white;
+    color: black;
+}
+
 h1 {
     font-size: 42px;
     margin-bottom: 10px;
 }
 
 .subtitle {
-    color: #b8d8c0;
+    color: black;
     margin-bottom: 40px;
 }
 
@@ -38,9 +104,10 @@ h1 {
 }
 
 .homeCard {
-    background-color: rgba(0, 40, 20, 0.65);
-    border: 1px solid rgba(120, 255, 160, 0.4);
+    background-color: white;
+    border: 1px solid black;
     border-radius: 16px;
+    color: black;
     padding: 28px;
 }
 
@@ -53,14 +120,26 @@ h1 {
     margin: 14px 0;
     padding: 12px;
     border-radius: 10px;
-    background-color: rgba(120, 255, 160, 0.12);
-    color: white;
+    border: 1px solid black;
+    background-color: white;
+    color: black;
     text-decoration: none;
     font-weight: bold;
 }
 
 .homeCard a:hover {
-    background-color: rgba(120, 255, 160, 0.28);
+    background-color: #f0f0f0;
+}
+
+/* Major 已经有默认值，所以 stage/test 链接默认就是可用状态。 */
+body:not(.major-selected) .majorLockedLink {
+    opacity: 1;
+    cursor: pointer;
+}
+
+body.major-selected .majorLockedLink {
+    opacity: 1;
+    cursor: pointer;
 }
 
 /* =========================
@@ -72,7 +151,7 @@ h1 {
 
     margin: 20px;
 
-    color: white;
+    color: inherit;
 
     text-decoration: none;
 
@@ -158,21 +237,25 @@ h1 {
     padding: 10px;
 
     box-sizing: border-box;
+
+    border: 1px solid black;
+
+    color: black;
 }
 
 .recordBox {
 
-    background-color: #2a2a2a;
+    background-color: white;
 }
 
 .qualifiedBox {
 
-    background-color: #008000;
+    background-color: white;
 }
 
 .eliminatedBox {
 
-    background-color: #b30000;
+    background-color: white;
 }
 
 
@@ -197,7 +280,7 @@ h1 {
 
     align-items: center;
 
-    min-height: 900px;
+    margin-top: 10px;
 }
 
 /* =========================
@@ -228,11 +311,11 @@ h1 {
 
     height: 28px;
 
-    border: none;
+    border: 1px solid black;
 
     border-radius: 6px;
 
-    background-color: #d9d9d9;
+    background-color: white;
 
     cursor: pointer;
 
@@ -259,9 +342,9 @@ h1 {
 
 .winnerButton {
 
-    background-color: #65d47a;
+    background-color: black;
 
-    color: black;
+    color: white;
 }
 
 
@@ -271,13 +354,15 @@ h1 {
 
 .loserButton {
 
-    background-color: #7a7a7a;
+    background-color: white;
 
-    color: #222;
+    color: black;
 }
 
 .teamCard {
-    background-color: rgba(255, 255, 255, 0.18);
+    background-color: white;
+    border: 1px solid black;
+    color: black;
     padding: 8px;
     margin-bottom: 8px;
     border-radius: 8px;
@@ -314,7 +399,7 @@ h1 {
     width: 70px;
     padding: 6px;
     border-radius: 6px;
-    border: none;
+    border: 1px solid black;
     text-align: center;
 }
 
@@ -322,9 +407,9 @@ h1 {
     margin-top: 20px;
     width: 100%;
     padding: 12px;
-    border: none;
+    border: 1px solid black;
     border-radius: 10px;
-    background-color: #65d47a;
+    background-color: white;
     color: black;
     font-weight: bold;
     cursor: pointer;
@@ -355,7 +440,9 @@ h1 {
 
     border-radius: 6px;
 
-    background-color: rgba(255,255,255,0.08);
+    border: 1px solid black;
+
+    background-color: white;
 }
 
 .ratingMatchRow {
@@ -391,7 +478,7 @@ h1 {
     width: 50px;
     padding: 6px;
     border-radius: 6px;
-    border: none;
+    border: 1px solid black;
     text-align: center;
 }
 
@@ -446,9 +533,10 @@ h1 {
 }
 
 .resultsLayout section {
-    background-color: rgba(0, 40, 20, 0.65);
-    border: 1px solid rgba(120, 255, 160, 0.4);
+    background-color: white;
+    border: 1px solid black;
     border-radius: 16px;
+    color: black;
     padding: 24px;
 }
 
@@ -474,7 +562,7 @@ h1 {
 
     margin-bottom: 12px;
 
-    color: #90ffb0;
+    color: black;
 }
 
 .controlPanel {
@@ -492,10 +580,10 @@ h1 {
     width: 180px;
     padding: 12px;
 
-    border: none;
+    border: 1px solid black;
     border-radius: 10px;
 
-    background-color: #65d47a;
+    background-color: white;
     color: black;
 
     font-weight: bold;
@@ -510,7 +598,7 @@ h1 {
 
     min-width: 140px;
 
-    color: #90ffb0;
+    color: black;
 
     font-weight: bold;
 
@@ -527,7 +615,7 @@ h1 {
 
     gap: 8px;
 
-    color: white;
+    color: inherit;
 
     font-weight: bold;
 
@@ -545,6 +633,46 @@ h1 {
     font-weight: bold;
 }
 
+/* Pick'Em 推荐输出：按 3-0 / Advance / 0-3 三段文字排版，不额外套卡片。 */
+.pickemRecommendation {
+    display: grid;
+    gap: 24px;
+}
+
+.resultsLayout section .pickemRecommendationGroup,
+body.theme-2026-cologne .resultsLayout section .pickemRecommendationGroup {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    color: inherit;
+    padding: 0;
+}
+
+.pickemRecommendationGroup h3 {
+    margin: 0 0 12px;
+    font-size: 22px;
+}
+
+.pickemRecommendationTeams {
+    display: grid;
+    gap: 10px 18px;
+    font-size: 18px;
+    line-height: 1.25;
+}
+
+.pickemRecommendationTeams.twoTeams {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.pickemRecommendationTeams.advanceTeams {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.pickemRecommendationTeams span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
 .pickemTrackerContainer {
     display: flex;
     gap: 24px;
@@ -553,6 +681,11 @@ h1 {
 
 .pickemTrackerContainer > .homeCard {
     flex: 1;
+}
+
+.pickemTrackerContainer > .homeCard:last-child {
+    position: relative;
+    overflow: hidden;
 }
 
 .pickemGroup {
@@ -565,32 +698,342 @@ h1 {
     gap: 12px;
 }
 
-.pickemSelect {
+.pickemSelect,
+.matchupSelect {
     width: 100%;
     padding: 12px;
 
-    border: none;
+    border: 1px solid black;
     border-radius: 10px;
 
-    background-color: #e8e8e8;
+    background-color: white;
     color: black;
 
     font-weight: bold;
     font-size: 14px;
 }
 
-.pickemSelect:focus {
-    outline: 2px solid #65d47a;
+.pickemSelect:focus,
+.matchupSelect:focus {
+    outline: 2px solid black;
+}
+
+/* 右侧卡片下半区的“相遇概率”工具，固定从卡片 50% 高度开始。 */
+.matchupProbabilityTool {
+    position: absolute;
+    top: 50%;
+    right: 28px;
+    bottom: 28px;
+    left: 28px;
+    margin-top: 0;
+    padding-top: 20px;
+    border-top: 1px solid black;
+}
+
+.matchupProbabilityTool h2 {
+    margin-top: 0;
+}
+
+.matchupSentence {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    line-height: 1.8;
+    font-weight: bold;
+}
+
+.matchupProbabilityButton {
+    width: auto;
+    margin-top: 12px;
+    padding: 10px 18px;
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color: white;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.matchupProbabilityButton:hover {
+    filter: brightness(1.1);
+}
+
+.matchupProbabilityResult {
+    margin-top: 16px;
+    font-weight: bold;
+}
+
+.matchupBreakdown {
+    display: grid;
+    gap: 6px;
+    max-width: 260px;
+    margin-top: 12px;
+}
+
+.matchupBreakdownRow {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 6px 8px;
+    border: 1px solid black;
+    border-radius: 6px;
+}
+
+.matchupSentence .matchupSelect {
+    width: auto;
+    min-width: 130px;
+    padding: 8px 10px;
 }
 
 .warningText {
-    color: #ffd966;
+    color: black;
     font-weight: bold;
     margin-top: 16px;
 }
 
 .successText {
-    color: #90ffb0;
+    color: black;
     font-weight: bold;
     margin-top: 16px;
+}
+
+body.theme-2026-cologne .mainButton,
+body.theme-2026-cologne .matchupProbabilityButton,
+body.theme-2026-cologne .controlPanel button {
+    border: none;
+    background-color: #65d47a;
+    color: black;
+}
+
+body.theme-2026-cologne .subtitle {
+    color: #b8d8c0;
+}
+
+body.theme-2026-cologne .homeCard,
+body.theme-2026-cologne .resultsLayout section {
+    background-color: rgba(0, 40, 20, 0.65);
+    border: 1px solid rgba(120, 255, 160, 0.4);
+    color: white;
+}
+
+body.theme-2026-cologne .homeCard a {
+    border: none;
+    background-color: rgba(120, 255, 160, 0.12);
+    color: white;
+}
+
+body.theme-2026-cologne .homeCard a:hover {
+    background-color: rgba(120, 255, 160, 0.28);
+}
+
+body.theme-2026-cologne .recordBox,
+body.theme-2026-cologne .qualifiedBox,
+body.theme-2026-cologne .eliminatedBox {
+    border: none;
+    color: white;
+}
+
+body.theme-2026-cologne .recordBox {
+    background-color: #2a2a2a;
+}
+
+body.theme-2026-cologne .qualifiedBox {
+    background-color: #008000;
+}
+
+body.theme-2026-cologne .eliminatedBox {
+    background-color: #b30000;
+}
+
+body.theme-2026-cologne .teamButton {
+    border: none;
+    background-color: #d9d9d9;
+}
+
+body.theme-2026-cologne .winnerButton {
+    background-color: #65d47a;
+    color: black;
+}
+
+body.theme-2026-cologne .loserButton {
+    background-color: #7a7a7a;
+    color: #222;
+}
+
+body.theme-2026-cologne .teamCard {
+    border: none;
+    background-color: rgba(255, 255, 255, 0.18);
+    color: white;
+}
+
+body.theme-2026-cologne .ratingInput,
+body.theme-2026-cologne .ratingMatchRow .ratingInput,
+body.theme-2026-cologne .pickemSelect,
+body.theme-2026-cologne .matchupSelect {
+    border: none;
+}
+
+body.theme-2026-cologne .resultRow {
+    border: none;
+    background-color: rgba(255,255,255,0.08);
+}
+
+body.theme-2026-cologne .resultHeader,
+body.theme-2026-cologne #statusMessage,
+body.theme-2026-cologne .successText {
+    color: #90ffb0;
+}
+
+body.theme-2026-cologne .bestPickemLabel {
+    color: white;
+}
+
+body.theme-2026-cologne .pickemSelect,
+body.theme-2026-cologne .matchupSelect {
+    background-color: #e8e8e8;
+    color: black;
+}
+
+body.theme-2026-cologne .pickemSelect:focus,
+body.theme-2026-cologne .matchupSelect:focus {
+    outline: 2px solid #65d47a;
+}
+
+body.theme-2026-cologne .warningText {
+    color: #ffd966;
+}
+
+body.theme-2026-cologne .matchupProbabilityTool {
+    border-top: 1px solid rgba(120, 255, 160, 0.4);
+}
+
+body.theme-2026-cologne .matchupBreakdownRow {
+    border: none;
+    background-color: rgba(255,255,255,0.08);
+}
+
+body.theme-2025-budapest .mainButton,
+body.theme-2025-budapest .matchupProbabilityButton,
+body.theme-2025-budapest .controlPanel button {
+    border: none;
+    background-color: #76548f;
+    color: white;
+}
+
+body.theme-2025-budapest .subtitle {
+    color: #d5bfdc;
+}
+
+body.theme-2025-budapest .homeCard,
+body.theme-2025-budapest .resultsLayout section {
+    background-color: rgba(30, 18, 40, 0.72);
+    border: 1px solid rgba(169, 93, 116, 0.55);
+    color: white;
+}
+
+body.theme-2025-budapest .homeCard a {
+    border: none;
+    background-color: rgba(118, 84, 143, 0.26);
+    color: white;
+}
+
+body.theme-2025-budapest .homeCard a:hover {
+    background-color: rgba(169, 93, 116, 0.36);
+}
+
+body.theme-2025-budapest .recordBox,
+body.theme-2025-budapest .qualifiedBox,
+body.theme-2025-budapest .eliminatedBox {
+    border: none;
+    color: white;
+}
+
+body.theme-2025-budapest .recordBox {
+    background-color: #2a2033;
+}
+
+body.theme-2025-budapest .qualifiedBox {
+    background-color: #28703f;
+}
+
+body.theme-2025-budapest .eliminatedBox {
+    background-color: #6f2433;
+}
+
+body.theme-2025-budapest .teamButton {
+    border: none;
+    background-color: #e8e0ec;
+}
+
+body.theme-2025-budapest .winnerButton {
+    background-color: #5fbf75;
+    color: black;
+}
+
+body.theme-2025-budapest .loserButton {
+    background-color: #7b6b83;
+    color: #1b1420;
+}
+
+body.theme-2025-budapest .teamCard {
+    border: none;
+    background-color: rgba(255, 255, 255, 0.16);
+    color: white;
+}
+
+body.theme-2025-budapest .ratingInput,
+body.theme-2025-budapest .ratingMatchRow .ratingInput,
+body.theme-2025-budapest .pickemSelect,
+body.theme-2025-budapest .matchupSelect {
+    border: none;
+}
+
+body.theme-2025-budapest .resultRow {
+    border: none;
+    background-color: rgba(255,255,255,0.08);
+}
+
+body.theme-2025-budapest .resultHeader,
+body.theme-2025-budapest #statusMessage,
+body.theme-2025-budapest .successText {
+    color: #dfc3ff;
+}
+
+body.theme-2025-budapest .bestPickemLabel {
+    color: white;
+}
+
+body.theme-2025-budapest .pickemSelect,
+body.theme-2025-budapest .matchupSelect {
+    background-color: #e8e0ec;
+    color: black;
+}
+
+body.theme-2025-budapest .pickemSelect:focus,
+body.theme-2025-budapest .matchupSelect:focus {
+    outline: 2px solid #a95d74;
+}
+
+body.theme-2025-budapest .warningText {
+    color: #ffd36e;
+}
+
+body.theme-2025-budapest .matchupProbabilityTool {
+    border-top: 1px solid rgba(169, 93, 116, 0.55);
+}
+
+body.theme-2025-budapest .matchupBreakdownRow {
+    border: none;
+    background-color: rgba(255,255,255,0.08);
+}
+
+.resultsLayout .pickemRecommendationGroup,
+body.theme-2026-cologne .resultsLayout .pickemRecommendationGroup,
+body.theme-2025-budapest .resultsLayout .pickemRecommendationGroup {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    color: inherit;
+    padding: 0;
 }

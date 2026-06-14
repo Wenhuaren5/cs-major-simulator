@@ -1,16 +1,18 @@
 // =========================
+// Stage 3 Simulator Page
+//
+// 这个页面负责：
+// 1. 从当前 Major 读取 Stage 3 第一轮对阵
+// 2. 让用户输入每支队伍 rating
+// 3. 跑 Monte Carlo 模拟并输出概率
+// 4. 根据模拟结果生成 Pick'Em 推荐
+// =========================
+
+// =========================
 // Stage 3 第一轮固定对阵
 // =========================
-const firstRoundMatches = [
-    ["Vitality", "FUT"],
-    ["NAVI", "Team Spirit"],
-    ["Falcons", "G2"],
-    ["The Mongolz", "BetBoom"],
-    ["PARIVISION", "9z"],
-    ["Aurora", "Monte"],
-    ["FURIA", "B8"],
-    ["MOUZ", "Legacy"]
-];
+const firstRoundMatches =
+    majorManager.getFirstRoundMatchesForStage("stage3");
 
 
 // =========================
@@ -327,29 +329,36 @@ function renderRecommendation(recommendation) {
 
     area.innerHTML = `
 
-        <h3>Recommended 3-0</h3>
+        <div class="pickemRecommendation">
 
-        ${recommendation.threeZero
-            .map(team =>
-                `<div>${team}</div>`
-            )
-            .join("")}
+            <section class="pickemRecommendationGroup">
+                <h3>3-0</h3>
+                <div class="pickemRecommendationTeams twoTeams">
+                    ${recommendation.threeZero
+                        .map(team => `<span>${team}</span>`)
+                        .join("")}
+                </div>
+            </section>
 
-        <h3>Recommended Advance</h3>
+            <section class="pickemRecommendationGroup">
+                <h3>Advance</h3>
+                <div class="pickemRecommendationTeams advanceTeams">
+                    ${recommendation.advance
+                        .map(team => `<span>${team}</span>`)
+                        .join("")}
+                </div>
+            </section>
 
-        ${recommendation.advance
-            .map(team =>
-                `<div>${team}</div>`
-            )
-            .join("")}
+            <section class="pickemRecommendationGroup">
+                <h3>0-3</h3>
+                <div class="pickemRecommendationTeams twoTeams">
+                    ${recommendation.zeroThree
+                        .map(team => `<span>${team}</span>`)
+                        .join("")}
+                </div>
+            </section>
 
-        <h3>Recommended 0-3</h3>
-
-        ${recommendation.zeroThree
-            .map(team =>
-                `<div>${team}</div>`
-            )
-            .join("")}
+        </div>
     `;
 }
 
@@ -362,7 +371,7 @@ saveRatingsButton.addEventListener("click", () => {
         getRatingsFromInput();
 
     localStorage.setItem(
-        "stage3Ratings",
+        majorManager.getMajorScopedKey("stage3Ratings"),
         JSON.stringify(ratings)
     );
 
@@ -376,7 +385,9 @@ saveRatingsButton.addEventListener("click", () => {
 loadRatingsButton.addEventListener("click", () => {
 
     const savedRatings =
-        localStorage.getItem("stage3Ratings");
+        localStorage.getItem(
+            majorManager.getMajorScopedKey("stage3Ratings")
+        );
 
     if (!savedRatings) {
         showStatus("没有找到已保存的评分");
@@ -446,23 +457,35 @@ function renderBestPickemRecommendation(recommendation) {
             ${(recommendation.passChance * 100).toFixed(1)}%
         </h3>
 
-        <h3>Best 3-0</h3>
+        <div class="pickemRecommendation">
 
-        ${recommendation.threeZero
-            .map(team => `<div>${team}</div>`)
-            .join("")}
+            <section class="pickemRecommendationGroup">
+                <h3>Best 3-0</h3>
+                <div class="pickemRecommendationTeams twoTeams">
+                    ${recommendation.threeZero
+                        .map(team => `<span>${team}</span>`)
+                        .join("")}
+                </div>
+            </section>
 
-        <h3>Best Advance</h3>
+            <section class="pickemRecommendationGroup">
+                <h3>Best Advance</h3>
+                <div class="pickemRecommendationTeams advanceTeams">
+                    ${recommendation.advance
+                        .map(team => `<span>${team}</span>`)
+                        .join("")}
+                </div>
+            </section>
 
-        ${recommendation.advance
-            .map(team => `<div>${team}</div>`)
-            .join("")}
+            <section class="pickemRecommendationGroup">
+                <h3>Best 0-3</h3>
+                <div class="pickemRecommendationTeams twoTeams">
+                    ${recommendation.zeroThree
+                        .map(team => `<span>${team}</span>`)
+                        .join("")}
+                </div>
+            </section>
 
-        <h3>Best 0-3</h3>
-
-        ${recommendation.zeroThree
-            .map(team => `<div>${team}</div>`)
-            .join("")}
+        </div>
     `;
 }
-

@@ -1,45 +1,38 @@
 // =========================
 // Swiss System Core Engine
 //
-// 这个文件只负责瑞士轮逻辑
-// 不负责页面显示
-// 不负责按钮点击
-// 不负责 Monte Carlo
+// 这个文件只负责瑞士轮的核心规则：
+// 1. 创建队伍对象
+// 2. 记录胜负和交手历史
+// 3. 按战绩组生成下一轮对局
+// 4. 尽量避免重复交手
+// 页面显示、按钮点击、Monte Carlo 模拟都放在别的文件里。
 // =========================
 
 
-// =========================
-// 队伍对象
-// =========================
+// 每支队伍在模拟过程里的状态对象。
 class Team {
 
     constructor(name, seed, rating = 1) {
 
         this.name = name;
-
         this.seed = seed;
-
         this.rating = rating;
 
         this.wins = 0;
-
         this.losses = 0;
 
+        // opponents 用来判断两队之前有没有交手过。
         this.opponents = [];
 
         this.advanced = false;
-
         this.eliminated = false;
     }
 }
 
 
-// =========================
-// 根据第一轮对阵生成队伍
-//
-// 第一轮左边一列：Seed 1-8
-// 第一轮右边一列：Seed 9-16
-// =========================
+// 根据第一轮对阵生成 16 支队伍。
+// 第一轮左边一列视为 seed 1-8，右边一列视为 seed 9-16。
 function createTeamsFromFirstRound(firstRoundMatches, ratings = {}) {
 
     let seedOrder = [];
@@ -63,9 +56,7 @@ function createTeamsFromFirstRound(firstRoundMatches, ratings = {}) {
 }
 
 
-// =========================
-// 根据队名找到队伍对象
-// =========================
+// 根据队名找到对应的队伍对象。
 function getTeamByName(teams, name) {
 
     return teams.find(team => {
@@ -74,9 +65,7 @@ function getTeamByName(teams, name) {
 }
 
 
-// =========================
-// 记录一场比赛结果
-// =========================
+// 写入一场比赛结果，并同步更新胜负、交手历史、晋级/淘汰状态。
 function recordMatchResult(teams, winnerName, loserName) {
 
     const winner =
@@ -101,20 +90,15 @@ function recordMatchResult(teams, winnerName, loserName) {
 }
 
 
-// =========================
-// 检查两支队伍是否已经交手过
-// =========================
+// 检查两支队伍是否已经交手过，瑞士轮配对时会优先避开这种情况。
 function playedBefore(teamA, teamB) {
 
     return teamA.opponents.includes(teamB.name);
 }
 
 
-// =========================
-// 计算 Buchholz 分数
-//
-// Buchholz = 所有对手当前胜场数之和
-// =========================
+// 计算 Buchholz 分数。
+// 这里用“所有对手当前净胜场之和”作为同战绩组内的排序依据。
 function getBuchholzScore(team, teams) {
 
     let score = 0;
@@ -132,6 +116,8 @@ function getBuchholzScore(team, teams) {
     return score;
 }
 
+// 6 队组的固定优先级表。
+// 普通回溯在 6 队组里有时会和目标网站不同，所以这里按已测试过的顺序尝试。
 const sixTeamPairingPriority = [
     [[1, 6], [2, 5], [3, 4]],
     [[1, 6], [2, 4], [3, 5]],
@@ -151,12 +137,9 @@ const sixTeamPairingPriority = [
 ];
 
 
-// =========================
-// 组内排序
-//
-// 第一排序：Buchholz 高的排前面
-// 第二排序：Seed 小的排前面
-// =========================
+// 同战绩组内排序：
+// 1. Buchholz 高的排前面
+// 2. Buchholz 相同则 seed 小的排前面
 function sortGroupForSwiss(group, teams) {
 
     return [...group].sort((a, b) => {
@@ -175,6 +158,7 @@ function sortGroupForSwiss(group, teams) {
     });
 }
 
+// 6 队组先按固定表尝试，只要找到没有重复交手的方案就使用。
 function createSixTeamPairings(sortedTeams) {
 
     for (const option of sixTeamPairingPriority) {
@@ -201,18 +185,9 @@ function createSixTeamPairings(sortedTeams) {
     return null;
 }
 
-// =========================
-// 组内配对
-//
-// 使用回溯搜索，尽量避免重复交手
-//
-// 规则：
-// 1. 先按 Buchholz + Seed 排序
-// 2. 每次固定当前最高排序队伍
-// 3. 从最低排序队伍开始尝试配对
-// 4. 如果后续配对失败，就回退重试
-// 5. 如果完全找不到无重复方案，才允许 fallback
-// =========================
+
+// 生成一个战绩组里的对阵。
+// 先排序，再优先使用 6 队组规则，最后用回溯搜索避免重复交手。
 function createSwissPairings(group, teams) {
 
     if (group.length < 2 || group.length % 2 !== 0) {
@@ -236,10 +211,6 @@ function createSwissPairings(group, teams) {
         );
     }
 
-    // =========================
-    // 6队组特殊规则：
-    // 按固定优先级表尝试配对
-    // =========================
     if (sorted.length === 6) {
 
         const sixTeamResult =
@@ -271,9 +242,8 @@ function createSwissPairings(group, teams) {
 }
 
 
-// =========================
-// 回溯搜索无重复配对
-// =========================
+// 回溯搜索无重复交手的配对。
+// 固定当前最高排序队伍，然后从低排序队伍开始试，失败就回退换下一种。
 function findPairingsWithoutRematch(
     remainingTeams,
     teams
@@ -286,13 +256,11 @@ function findPairingsWithoutRematch(
     const teamA =
         remainingTeams[0];
 
-    // 从最低排序队伍开始尝试
     for (let i = remainingTeams.length - 1; i >= 1; i--) {
 
         const teamB =
             remainingTeams[i];
 
-        // 如果已经打过，跳过
         if (playedBefore(teamA, teamB)) {
             continue;
         }
@@ -324,10 +292,8 @@ function findPairingsWithoutRematch(
 }
 
 
-// =========================
-// fallback 配对
-// 只有在无重复方案不存在时使用
-// =========================
+// fallback 配对。
+// 只有在完全找不到无重复交手方案时才使用，保证页面至少能继续生成。
 function createFallbackPairings(sortedTeams) {
 
     const remaining =
@@ -353,14 +319,8 @@ function createFallbackPairings(sortedTeams) {
 }
 
 
-// =========================
-// 生成下一轮对阵
-//
-// 规则：
-// 1. 排除已经晋级和淘汰的队伍
-// 2. 按当前战绩分组
-// 3. 每个战绩组内用 Swiss Pairing 配对
-// =========================
+// 生成下一轮对阵。
+// 先排除已经 3 胜晋级和 3 负淘汰的队伍，再按当前战绩分组配对。
 function generateNextRound(teams) {
 
     const activeTeams =

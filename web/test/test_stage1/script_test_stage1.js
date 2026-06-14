@@ -1,16 +1,8 @@
 // =========================
 // Stage 1 第一轮固定对阵
 // =========================
-const firstRoundMatches = [
-    ["GamerLegion", "NRG"],
-    ["B8", "TYLOO"],
-    ["HEROIC", "Sharks"],
-    ["BetBoom", "Gaimin Gladiators"],
-    ["BIG", "Liquid"],
-    ["M80", "Lynn Vision"],
-    ["MIBR", "Thunder dOWNUNDER"],
-    ["SINNERS", "FlyQuest"]
-];
+const firstRoundMatches =
+    majorManager.getFirstRoundMatchesForStage("stage1");
 
 
 // =========================
@@ -464,6 +456,7 @@ function clearFutureRounds() {
     }
 }
 
+// 显示 3-0、晋级、0-3、淘汰这四类最终结果。
 function renderFinalResults() {
 
     const threeZeroBox =
@@ -517,6 +510,7 @@ function renderFinalResults() {
 
 fillPickemSelects();
 
+// 把当前 stage 的所有队伍填进 Pick'Em 下拉框。
 function fillPickemSelects() {
 
     const teamNames =
@@ -638,6 +632,7 @@ document
     .getElementById("calculateMyPickemButton")
     .addEventListener("click", () => {
 
+        // 先读取 simulator 里保存过的 rating；没有保存时用默认 50/50。
         const ratingData =
             getSavedStage1Ratings();
 
@@ -652,6 +647,7 @@ document
         const userPickem =
             getUserPickem();
 
+        // 从当前比赛状态继续模拟，估算用户作业保 5 的概率。
         const passChance =
             calculateUserPassChance(
                 userPickem,
@@ -742,7 +738,7 @@ savePickemButton
             getUserPickem();
 
         localStorage.setItem(
-            "stage1UserPickem",
+            majorManager.getMajorScopedKey("stage1UserPickem"),
             JSON.stringify(userPickem)
         );
 
@@ -760,7 +756,7 @@ loadPickemButton
 
         const savedPickem =
             localStorage.getItem(
-                "stage1UserPickem"
+                majorManager.getMajorScopedKey("stage1UserPickem")
             );
 
         if (!savedPickem) {
@@ -969,7 +965,7 @@ function getSavedStage1Ratings() {
 
     const savedRatings =
         localStorage.getItem(
-            "stage1Ratings"
+            majorManager.getMajorScopedKey("stage1Ratings")
         );
 
     if (savedRatings) {

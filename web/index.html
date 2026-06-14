@@ -2,15 +2,13 @@
 <html lang="zh">
 
 <head>
-
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-K2P338QDGZ"></script>
-    
+
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-
         gtag('config', 'G-K2P338QDGZ');
     </script>
 
@@ -22,9 +20,23 @@
 
 <body>
 
+    <nav class="majorNav">
+        <button class="majorButton" data-major-id="2025_budapest">
+            2025 Budapest
+        </button>
+
+        <button class="majorButton" data-major-id="2026_cologne">
+            2026 Cologne
+        </button>
+
+        <button class="majorButton" data-major-id="2026_singapore">
+            2026 Singapore
+        </button>
+    </nav>
+
     <main class="homeContainer">
 
-        <h1>CS2 Major 瑞士轮模拟器</h1>
+        <h1>CS Major 模拟器</h1>
 
         <p class="subtitle">
             Swiss system simulator and Pick'Em research tool
@@ -35,22 +47,25 @@
             <section class="homeCard">
                 <h2>Simulator</h2>
 
-                <a href="./simulator/simulator_stage1/simulator_stage1.html">Stage 1 Simulator</a>
-                <a href="./simulator/simulator_stage2/simulator_stage2.html">Stage 2 Simulator</a>
-                <a href="./simulator/simulator_stage3/simulator_stage3.html">Stage 3 Simulator</a>
+                <a class="majorLockedLink" href="./simulator/simulator_stage1/simulator_stage1.html">Stage 1 Simulator</a>
+                <a class="majorLockedLink" href="./simulator/simulator_stage2/simulator_stage2.html">Stage 2 Simulator</a>
+                <a class="majorLockedLink" href="./simulator/simulator_stage3/simulator_stage3.html">Stage 3 Simulator</a>
             </section>
 
             <section class="homeCard">
                 <h2>Test Lab</h2>
 
-                <a href="./test/test_stage1/test_stage1.html">Stage 1 Test</a>
-                <a href="./test/test_stage2/test_stage2.html">Stage 2 Test</a>
-                <a href="./test/test_stage3/test_stage3.html">Stage 3 Test</a>
+                <a class="majorLockedLink" href="./test/test_stage1/test_stage1.html">Stage 1 Test</a>
+                <a class="majorLockedLink" href="./test/test_stage2/test_stage2.html">Stage 2 Test</a>
+                <a class="majorLockedLink" href="./test/test_stage3/test_stage3.html">Stage 3 Test</a>
             </section>
 
         </div>
 
     </main>
+
+    <script src="./js/major-data.js"></script>
+    <script src="./js/major-manager.js"></script>
 
 </body>
 
