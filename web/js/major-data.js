@@ -5,7 +5,7 @@
 // 以后新增 Major 时，只需要照着同样结构增加一个 key，再在首页加按钮。
 // =========================
 window.CS_MAJOR_DATA = {
-    defaultMajorId: "2026_cologne",
+    defaultMajorId: "2026_singapore",
 
     majors: {
         "2025_budapest": {
@@ -97,45 +97,32 @@ window.CS_MAJOR_DATA = {
         },
 
         "2026_singapore": {
-            name: "2026 Singapore",
+            name: "PGL Major Singapore 2026",
             themeClass: "theme-2026-singapore",
             defaultPath: "./simulator/simulator_stage1/simulator_stage1.html",
             stages: {
                 stage1: {
+                    available: true,
                     firstRoundMatches: [
-                        ["Singapore Team 1", "Singapore Team 9"],
-                        ["Singapore Team 2", "Singapore Team 10"],
-                        ["Singapore Team 3", "Singapore Team 11"],
-                        ["Singapore Team 4", "Singapore Team 12"],
-                        ["Singapore Team 5", "Singapore Team 13"],
-                        ["Singapore Team 6", "Singapore Team 14"],
-                        ["Singapore Team 7", "Singapore Team 15"],
-                        ["Singapore Team 8", "Singapore Team 16"]
+                        ["HEROIC", "Imperial"],
+                        ["9z", "Lynn Vision"],
+                        ["Ninjas in Pyjamas", "M80"],
+                        ["100 Thieves", "Chinggis Warriors"],
+                        ["Team Liquid", "BC.Game"],
+                        ["PARIVISION", "DENDELE"],
+                        ["FaZe", "Wildcard"],
+                        ["Eternal Fire", "FlyQuest"]
                     ]
                 },
                 stage2: {
-                    firstRoundMatches: [
-                        ["Singapore Stage 2 Team 1", "Singapore Stage 2 Team 9"],
-                        ["Singapore Stage 2 Team 2", "Singapore Stage 2 Team 10"],
-                        ["Singapore Stage 2 Team 3", "Singapore Stage 2 Team 11"],
-                        ["Singapore Stage 2 Team 4", "Singapore Stage 2 Team 12"],
-                        ["Singapore Stage 2 Team 5", "Singapore Stage 2 Team 13"],
-                        ["Singapore Stage 2 Team 6", "Singapore Stage 2 Team 14"],
-                        ["Singapore Stage 2 Team 7", "Singapore Stage 2 Team 15"],
-                        ["Singapore Stage 2 Team 8", "Singapore Stage 2 Team 16"]
-                    ]
+                    available: false,
+                    unavailableReason: "等待 Stage 1 结束并公布 Stage 2 首轮对阵",
+                    firstRoundMatches: []
                 },
                 stage3: {
-                    firstRoundMatches: [
-                        ["Singapore Stage 3 Team 1", "Singapore Stage 3 Team 9"],
-                        ["Singapore Stage 3 Team 2", "Singapore Stage 3 Team 10"],
-                        ["Singapore Stage 3 Team 3", "Singapore Stage 3 Team 11"],
-                        ["Singapore Stage 3 Team 4", "Singapore Stage 3 Team 12"],
-                        ["Singapore Stage 3 Team 5", "Singapore Stage 3 Team 13"],
-                        ["Singapore Stage 3 Team 6", "Singapore Stage 3 Team 14"],
-                        ["Singapore Stage 3 Team 7", "Singapore Stage 3 Team 15"],
-                        ["Singapore Stage 3 Team 8", "Singapore Stage 3 Team 16"]
-                    ]
+                    available: false,
+                    unavailableReason: "等待 Stage 2 结束并公布 Stage 3 首轮对阵",
+                    firstRoundMatches: []
                 }
             }
         }

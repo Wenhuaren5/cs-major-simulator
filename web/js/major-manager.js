@@ -64,6 +64,7 @@
         sessionStorage.setItem(storageKey, majorId);
 
         applyCurrentMajorTheme();
+        bindMajorLockedLinks();
 
         if (targetPath) {
             window.location.href = targetPath;
@@ -101,10 +102,27 @@
             });
     }
 
-    // 现在网站默认就是 Cologne，所以 stage/test 链接一开始就可以直接点。
-    // 这个函数先保留为空，之后如果又需要锁定入口，可以继续在这里加逻辑。
     function bindMajorLockedLinks() {
-        return;
+        document
+            .querySelectorAll(".majorLockedLink[data-stage-id]")
+            .forEach(link => {
+                const stage = getCurrentMajor().stages[link.dataset.stageId];
+
+                link.classList.remove("isUnavailable");
+                link.removeAttribute("aria-disabled");
+                link.removeAttribute("title");
+                link.onclick = null;
+
+                if (!stage || stage.available === false) {
+                    link.classList.add("isUnavailable");
+                    link.setAttribute("aria-disabled", "true");
+                    link.title = stage?.unavailableReason || "该阶段暂未开放";
+
+                    link.onclick = event => {
+                        event.preventDefault();
+                    };
+                }
+            });
     }
 
     applyCurrentMajorTheme();

@@ -20,10 +20,17 @@ body.theme-2026-cologne {
     color: white;
 }
 
-/* Singapore 主题：先保留白底占位，等正式配色和数据确定后再扩展。 */
+/* Singapore 主题：参考赛事页面，橙棕色从上到下逐渐变深。 */
 body.theme-2026-singapore {
-    background: white;
-    color: black;
+    background:
+        linear-gradient(
+            to bottom,
+            #6b3408 0%,
+            #4b2407 45%,
+            #211604 100%
+        );
+
+    color: white;
 }
 
 /* Budapest 主题：暗红到紫黑的渐变，匹配用户提供的 Major 参考图。 */
@@ -82,9 +89,15 @@ body.theme-2025-budapest {
 }
 
 .majorButton[data-major-id="2026_singapore"] {
-    border: 1px solid black;
-    background-color: white;
-    color: black;
+    border: none;
+    background-color: #c76518;
+    color: white;
+}
+
+.majorLockedLink.isUnavailable {
+    opacity: 0.48;
+    cursor: not-allowed;
+    filter: grayscale(0.8);
 }
 
 h1 {
@@ -764,6 +777,15 @@ body.theme-2026-cologne .resultsLayout section .pickemRecommendationGroup {
     font-weight: bold;
 }
 
+/* 相遇概率下方说明本次计算使用已保存评分，还是默认 50/50。 */
+.matchupRatingSource {
+    margin: 12px 0 0;
+    font-size: 13px;
+    line-height: 1.5;
+    font-weight: normal;
+    opacity: 0.82;
+}
+
 .matchupBreakdown {
     display: grid;
     gap: 6px;
@@ -1026,6 +1048,119 @@ body.theme-2025-budapest .matchupProbabilityTool {
 body.theme-2025-budapest .matchupBreakdownRow {
     border: none;
     background-color: rgba(255,255,255,0.08);
+}
+
+body.theme-2026-singapore .mainButton,
+body.theme-2026-singapore .matchupProbabilityButton,
+body.theme-2026-singapore .controlPanel button {
+    border: none;
+    background-color: #c76518;
+    color: white;
+}
+
+body.theme-2026-singapore .subtitle {
+    color: #dfc49d;
+}
+
+body.theme-2026-singapore .homeCard,
+body.theme-2026-singapore .resultsLayout section {
+    background-color: rgba(58, 28, 9, 0.72);
+    border: 1px solid rgba(199, 101, 24, 0.5);
+    color: white;
+}
+
+body.theme-2026-singapore .homeCard a {
+    border: none;
+    background-color: rgba(199, 101, 24, 0.25);
+    color: white;
+}
+
+body.theme-2026-singapore .homeCard a:hover {
+    background-color: rgba(199, 101, 24, 0.4);
+}
+
+body.theme-2026-singapore .recordBox,
+body.theme-2026-singapore .qualifiedBox,
+body.theme-2026-singapore .eliminatedBox {
+    border: none;
+    color: white;
+}
+
+body.theme-2026-singapore .recordBox {
+    background-color: #5a2b13;
+}
+
+body.theme-2026-singapore .qualifiedBox {
+    background-color: #008000;
+}
+
+body.theme-2026-singapore .eliminatedBox {
+    background-color: #b30000;
+}
+
+body.theme-2026-singapore .teamButton {
+    border: none;
+    background: #eadcc6;
+    color: #301b0c;
+}
+
+body.theme-2026-singapore .winnerButton {
+    background-color: #31b77e;
+    color: #071f16;
+}
+
+body.theme-2026-singapore .loserButton {
+    background: #8a695b;
+    color: #2e1a12;
+}
+
+body.theme-2026-singapore .teamCard {
+    border: none;
+    background: rgba(255, 235, 207, 0.1);
+    color: white;
+}
+
+body.theme-2026-singapore .ratingInput,
+body.theme-2026-singapore .ratingMatchRow .ratingInput,
+body.theme-2026-singapore .pickemSelect,
+body.theme-2026-singapore .matchupSelect {
+    border: none;
+    background-color: #f0e2cb;
+    color: #2e1a0d;
+}
+
+body.theme-2026-singapore .resultRow,
+body.theme-2026-singapore .matchupBreakdownRow {
+    border: none;
+    background: rgba(255, 235, 207, 0.08);
+}
+
+body.theme-2026-singapore .resultHeader,
+body.theme-2026-singapore #statusMessage,
+body.theme-2026-singapore .successText {
+    color: #63d8a7;
+}
+
+body.theme-2026-singapore .bestPickemLabel {
+    color: #fff8ed;
+}
+
+body.theme-2026-singapore .pickemSelect:focus,
+body.theme-2026-singapore .matchupSelect:focus {
+    outline: 2px solid #d87525;
+}
+
+body.theme-2026-singapore .warningText {
+    color: #ffc66d;
+}
+
+body.theme-2026-singapore .matchupProbabilityTool {
+    border-top: 1px solid rgba(222, 139, 61, 0.34);
+}
+
+body.major-selected .majorLockedLink.isUnavailable {
+    opacity: 0.48;
+    cursor: not-allowed;
 }
 
 .resultsLayout .pickemRecommendationGroup,

@@ -35,6 +35,101 @@
         return firstRoundMatches.flat();
     }
 
+    // 当前脚本会被 Stage 1 / 2 / 3 的 Test 页面共同加载。
+    // 从页面路径识别当前 stage，才能读取对应 Simulator 保存的评分。
+    function getCurrentStageId() {
+        const match =
+            window.location.pathname.match(/test_stage([123])/);
+
+        return match ? `stage${match[1]}` : null;
+    }
+
+    // 读取当前 Major、当前 Stage 的评分。
+    // Simulator 保存评分时使用的 key 是：
+    // majorManager.getMajorScopedKey("stage1Ratings")（Stage 2/3 同理）。
+    // 如果没有保存评分、数据损坏或某支队伍缺少评分，则该队回退到 5 分。
+    // 两队都是 5 分时，胜率自然就是 50/50。
+    function getRatingsForCurrentStage() {
+        const defaultRating = 5;
+        const ratings = {};
+
+        getTeamNames().forEach(team => {
+            ratings[team] = defaultRating;
+        });
+
+        const stageId = getCurrentStageId();
+
+        if (!stageId) {
+            return {
+                ratings,
+                usingDefault: true
+            };
+        }
+
+        const storageKey =
+            majorManager.getMajorScopedKey(`${stageId}Ratings`);
+
+        const savedRatings =
+            localStorage.getItem(storageKey);
+
+        if (!savedRatings) {
+            return {
+                ratings,
+                usingDefault: true
+            };
+        }
+
+        try {
+            const parsedRatings = JSON.parse(savedRatings);
+
+            getTeamNames().forEach(team => {
+                const savedRating = Number(parsedRatings[team]);
+
+                // 评分必须是正数；无效值继续使用默认 5 分。
+                if (Number.isFinite(savedRating) && savedRating > 0) {
+                    ratings[team] = savedRating;
+                }
+            });
+
+            return {
+                ratings,
+                usingDefault: false
+            };
+        } catch (error) {
+            console.warn(
+                "Saved ratings are invalid; using default ratings.",
+                error
+            );
+
+            return {
+                ratings,
+                usingDefault: true
+            };
+        }
+    }
+
+    // 用与 Simulator Monte Carlo 相同的公式模拟单场比赛：
+    // A 队胜率 = A 评分 /（A 评分 + B 评分）。
+    // 例如 8 分对 6 分时，A 的胜率是 8 / 14，约为 57.1%。
+    function simulateMatchWinnerByRating(match, ratings) {
+        const teamAName = match.a.name;
+        const teamBName = match.b.name;
+
+        const teamARating = ratings[teamAName] || 5;
+        const teamBRating = ratings[teamBName] || 5;
+
+        const teamAWinRate =
+            teamARating / (teamARating + teamBRating);
+
+        const teamAWins =
+            Math.random() < teamAWinRate;
+
+        return {
+            winner: teamAWins ? teamAName : teamBName,
+            loser: teamAWins ? teamBName : teamAName
+        };
+    }
+
     // 初始化两个队伍下拉框。
     function fillTeamSelects() {
         const options =
@@ -192,10 +287,19 @@
     }
 
     // 从当前已保存局面随机模拟一条路径，直到目标轮。
-    // 已保存的比赛用真实选择，没保存的比赛按 50/50 随机。
-    function simulateOnePathUntilRound(targetRound, teamA, teamB) {
+    // 已保存的比赛结果优先视为真实结果；尚未完成的比赛才按评分随机。
+    // 只有用户没有保存评分时，各队才会以默认 5 分形成 50/50。
+    function simulateOnePathUntilRound(
+        targetRound,
+        teamA,
+        teamB,
+        ratings
+    ) {
         const simulatedTeams =
-            createTeamsFromFirstRound(firstRoundMatches);
+            createTeamsFromFirstRound(
+                firstRoundMatches,
+                ratings
+            );
 
         for (let round = 1; round <= targetRound; round++) {
             const roundData =
@@ -229,14 +333,16 @@
                     return;
                 }
 
-                const teamAName = match.a.name;
-                const teamBName = match.b.name;
-                const teamAWins = Math.random() < 0.5;
+                const simulatedResult =
+                    simulateMatchWinnerByRating(
+                        match,
+                        ratings
+                    );
 
                 recordMatchResult(
                     simulatedTeams,
-                    teamAWins ? teamAName : teamBName,
-                    teamAWins ? teamBName : teamAName
+                    simulatedResult.winner,
+                    simulatedResult.loser
                 );
             });
         }
@@ -247,6 +353,9 @@
     // 主计算函数：
     // 能确定就返回 100% 或 0%；不能确定就跑多次模拟并统计总概率和分组概率。
     function calculateMatchupProbability(targetRound, teamA, teamB) {
+        const ratingData =
+            getRatingsForCurrentStage();
+
         const knownRoundData =
             getKnownRoundDataForRound(targetRound);
 
@@ -267,7 +376,8 @@
             return {
                 probability: pairGroup ? 1 : 0,
                 breakdown,
-                simulated: false
+                simulated: false,
+                usingDefaultRatings: ratingData.usingDefault
             };
         }
 
@@ -279,7 +389,8 @@
                 simulateOnePathUntilRound(
                     targetRound,
                     teamA,
-                    teamB
+                    teamB,
+                    ratingData.ratings
                 );
 
             if (pairGroup) {
@@ -301,7 +412,8 @@
         return {
             probability: matchedCount / simulationCount,
             breakdown,
-            simulated: true
+            simulated: true,
+            usingDefaultRatings: ratingData.usingDefault
         };
     }
 
@@ -368,6 +480,17 @@
         resultArea.innerHTML = `
             <h3>${(result.probability * 100).toFixed(1)}%</h3>
             ${renderBreakdown(targetRound, result.breakdown)}
+            <p class="matchupRatingSource">
+                ${
+                    result.simulated
+                        ? (
+                            result.usingDefaultRatings
+                                ? "未找到已保存评分，未完成比赛按默认 50/50 模拟。"
+                                : "未完成比赛已使用当前 Stage 保存的战力评分模拟。"
+                        )
+                        : "目标轮之前的赛果完整，结果由已填写赛果直接确定。"
+                }
+            </p>
         `;
     });
 
