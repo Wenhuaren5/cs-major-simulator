@@ -104,14 +104,14 @@ window.CS_MAJOR_DATA = {
                 stage1: {
                     available: true,
                     firstRoundMatches: [
-                        ["HEROIC", "Imperial"],
-                        ["9z", "Lynn Vision"],
                         ["Ninjas in Pyjamas", "M80"],
-                        ["100 Thieves", "Chinggis Warriors"],
-                        ["Team Liquid", "BC.Game"],
                         ["PARIVISION", "DENDELE"],
+                        ["HEROIC", "Imperial"],
                         ["FaZe", "Wildcard"],
-                        ["Eternal Fire", "FlyQuest"]
+                        ["Team Liquid", "BC.Game"],
+                        ["Eternal Fire", "FlyQuest"],
+                        ["100 Thieves", "Chinggis Warriors"],
+                        ["9z", "Lynn Vision"]
                     ]
                 },
                 stage2: {
