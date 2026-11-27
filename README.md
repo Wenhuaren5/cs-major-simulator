@@ -23,14 +23,14 @@ CS Major Simulator 最初诞生于我对 Major Pick'Em 的一个简单想法：
 
 ## 当前版本
 
-### v4.1 — PGL Major Singapore 2026
+### v3.3 — Pick'Em Survival Tracker
 
 ### Singapore 2026 数据更新
 
 网站默认赛事已切换为 PGL Major Singapore 2026。
 
 * Stage 1：已录入 2026 年 11 月 24 日官方首轮对阵，可直接模拟
-* Stage 2：等待 Stage 1 结束并公布首轮对阵
+* Stage 2：已录入官方首轮对阵，可直接模拟
 * Stage 3：等待 Stage 2 结束并公布首轮对阵
 
 赛事数据集中维护在 `web/js/major-data.js`。后续只需填入对应阶段的

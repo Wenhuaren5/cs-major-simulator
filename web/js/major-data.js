@@ -115,9 +115,17 @@ window.CS_MAJOR_DATA = {
                     ]
                 },
                 stage2: {
-                    available: false,
-                    unavailableReason: "等待 Stage 1 结束并公布 Stage 2 首轮对阵",
-                    firstRoundMatches: []
+                    available: true,
+                    firstRoundMatches: [
+                        ["FUT", "FlyQuest"],
+                        ["Nemiga", "Ninjas in Pyjamas"],
+                        ["G2", "Team Liquid"],
+                        ["1win", "Eternal Fire"],
+                        ["Natus Vincere", "PARIVISION"],
+                        ["Astralis", "Imperial"],
+                        ["The MongolZ", "Lynn Vision"],
+                        ["MIBR", "100 Thieves"]
+                    ]
                 },
                 stage3: {
                     available: false,
